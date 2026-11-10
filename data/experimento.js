@@ -1,9 +1,9 @@
 // Gerado por tools/atualizar_dados.py — não editar à mão.
 window.EXPERIMENTO = {
- "gerado_em": "10/11/2026 15:09",
+ "gerado_em": "10/11/2026 15:26",
  "runs": 20,
  "planejado": 320,
- "feitas": 52,
+ "feitas": 73,
  "alvos": [
   "juice-shop",
   "shopify",
@@ -19,9 +19,9 @@ window.EXPERIMENTO = {
   "cot": "chain-of-thought"
  },
  "inicio": "2026-11-10T14:49:06",
- "ultima": "2026-11-10T15:09:27",
- "hip_total": 151,
- "lat_media_s": 23.8,
+ "ultima": "2026-11-10T15:22:22",
+ "hip_total": 237,
+ "lat_media_s": 27.6,
  "erros_formato": 0,
  "celulas": [
   {
@@ -108,18 +108,18 @@ window.EXPERIMENTO = {
    "alvo": "juice-shop",
    "modelo": "qwen",
    "prompt": "fewshot",
-   "feitas": 12,
+   "feitas": 20,
    "resumo": {
-    "n": 12,
-    "lat_med": 16.2,
-    "lat_dp": 5.6,
-    "hip_med": 2.25,
+    "n": 20,
+    "lat_med": 15.2,
+    "lat_dp": 4.6,
+    "hip_med": 2.2,
     "hip_min": 2,
     "hip_max": 3,
-    "hip_tot": 27,
+    "hip_tot": 44,
     "erros": 0,
     "tin": 1882,
-    "tout_med": 326,
+    "tout_med": 319,
     "hip_por_run": [
      2,
      3,
@@ -132,6 +132,14 @@ window.EXPERIMENTO = {
      2,
      3,
      2,
+     2,
+     2,
+     3,
+     2,
+     2,
+     2,
+     2,
+     2,
      2
     ]
    }
@@ -140,8 +148,34 @@ window.EXPERIMENTO = {
    "alvo": "juice-shop",
    "modelo": "qwen",
    "prompt": "cot",
-   "feitas": 0,
-   "resumo": null
+   "feitas": 13,
+   "resumo": {
+    "n": 13,
+    "lat_med": 51.3,
+    "lat_dp": 25.9,
+    "hip_med": 5.31,
+    "hip_min": 1,
+    "hip_max": 10,
+    "hip_tot": 69,
+    "erros": 0,
+    "tin": 630,
+    "tout_med": 1167,
+    "hip_por_run": [
+     2,
+     7,
+     10,
+     1,
+     5,
+     2,
+     2,
+     9,
+     8,
+     8,
+     5,
+     9,
+     1
+    ]
+   }
   },
   {
    "alvo": "shopify",

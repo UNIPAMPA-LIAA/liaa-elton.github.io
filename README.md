@@ -30,20 +30,9 @@ Tecla **P** (ou o botão no topo): cada seção vira um slide em tela cheia.
 Setas ou PageUp/PageDown navegam, Esc sai. Funciona também abrindo o
 `index.html` direto do disco, sem internet para tudo exceto as fontes.
 
-## Publicar no GitHub Pages
+## Publicação
 
-Um site `<nome>.github.io` precisa de uma conta (ou organização) do GitHub
-chamada `liaa-elton` e de um repositório com o mesmo nome do site:
+Repositório: https://github.com/UNIPAMPA-LIAA/liaa-elton.github.io
+Site: https://unipampa-liaa.github.io/liaa-elton.github.io/
 
-1. Criar a conta ou organização `liaa-elton` no GitHub.
-2. Criar o repositório público `liaa-elton.github.io`.
-3. Nesta pasta:
-   ```bash
-   git init -b main
-   git add .
-   git commit -m "Site do projeto ReconAI"
-   git remote add origin https://github.com/liaa-elton/liaa-elton.github.io.git
-   git push -u origin main
-   ```
-4. Em *Settings → Pages*, fonte: *Deploy from a branch*, `main`, pasta `/ (root)`.
-   Em um ou dois minutos o site fica em https://liaa-elton.github.io.
+GitHub Pages: *Settings → Pages → Deploy from a branch*, `main`, pasta `/ (root)`.

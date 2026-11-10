@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReconAI · Elton Lunardi · LIAA</title>
+<meta name="description" content="ReconAI: hipóteses de vetores de ataque geradas por LLM a partir de reconhecimento passivo, comparadas a um analista especialista. Projeto da disciplina Laboratório de Inteligência Artificial Aplicada.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23172033'/%3E%3Crect x='6' y='8' width='20' height='3' fill='%23A16207'/%3E%3Crect x='9' y='14' width='14' height='3' fill='%234338CA'/%3E%3Crect x='12' y='20' width='8' height='3' fill='%230F766E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<a class="pular" href="#contexto">Pular para o conteúdo</a>
+
+<header class="topo">
+  <a class="marca" href="#inicio">ReconAI</a>
+  <nav class="trilho" aria-label="Seções">
+    <a href="#contexto">Contexto</a>
+    <a href="#problema">Problema</a>
+    <a href="#proposta">Proposta</a>
+    <a href="#confianca">Fontes</a>
+    <a href="#experimento">Experimento</a>
+    <a href="#evolucao">Evolução</a>
+    <a href="#tropecos">Tropeços</a>
+    <a href="#proximos">Próximos passos</a>
+  </nav>
+  <div class="acoes">
+    <button type="button" id="btn-apresentar" aria-pressed="false" title="Tecla P">Modo apresentação</button>
+    <button type="button" id="btn-tema" aria-label="Alternar tema claro/escuro">◐</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section id="inicio" class="hero secao">
+  <div class="coluna">
+    <p class="autoria">Elton Lunardi, Laboratório de Inteligência Artificial Aplicada, Mestrado Profissional em Computação Aplicada</p>
+    <h1>ReconAI</h1>
+    <p class="tese">Um pentest começa com milhares de nomes de domínio e termina com meia dúzia de coisas que valem ser testadas. O ReconAI coleta esses dados sem atacar o alvo, mede o quanto cada fonte merece confiança e pede a um LLM as hipóteses de ataque. Depois um analista humano julga essas hipóteses às cegas.</p>
+  </div>
+
+  <figure class="funil" aria-labelledby="funil-legenda">
+    <ol>
+      <li style="--v:10577" data-natureza="herdado"><span class="n">10.577</span><span class="r">subdomínios encontrados pelo subfinder</span></li>
+      <li style="--v:9391" data-natureza="vivo"><span class="n">9.391</span><span class="r">ainda resolvem no DNS (dnsx)</span></li>
+      <li style="--v:9343" data-natureza="primeira"><span class="n">9.343</span><span class="r">responderam HTTP (httpx)</span></li>
+      <li style="--v:76" data-natureza="neutro"><span class="n">76</span><span class="r">grupos com a mesma assinatura HTTP</span></li>
+      <li style="--v:52" data-natureza="neutro"><span class="n">52</span><span class="r">grupos que cabem no contexto do LLM (3,5 mil tokens)</span></li>
+      <li style="--v:3" data-natureza="llm"><span class="n">≈ 3</span><span class="r">hipóteses priorizadas por execução</span></li>
+    </ol>
+    <figcaption id="funil-legenda">shopify.com, coleta de 03/11/2026. Largura das barras em escala logarítmica.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CONTEXTO ============ -->
+<section id="contexto" class="secao">
+  <div class="coluna">
+    <h2>Contexto</h2>
+    <p>Todo teste de intrusão autorizado começa pelo reconhecimento. Antes de enviar qualquer carga ao alvo, o analista precisa saber o que existe: quais subdomínios, quais servidores, que software e em que versão. Quanto menos o reconhecimento toca o alvo, menor o risco de derrubar um serviço ou disparar alarmes, e por isso a primeira fase costuma ser <em>passiva</em>. Ela consulta bases públicas que outros já coletaram: logs de Certificate Transparency, DNS passivo, varreduras da Censys, o banco de CVEs do NIST.</p>
+    <p>O volume é o primeiro obstáculo. Um domínio grande como o shopify.com devolve mais de dez mil nomes, e quase todos são lojas inativas idênticas. Achar ali o <code>community-staging</code> com versão exposta ou o login fora da CDN é trabalho manual, lento e dependente da experiência de quem lê.</p>
+    <p>LLMs leem rápido e sabem muito sobre vulnerabilidades. A pergunta é se o que eles dizem sobre esses dados é útil a quem faz o pentest, ou se só soa plausível.</p>
+  </div>
+</section>
+
+<!-- ============ PROBLEMA ============ -->
+<section id="problema" class="secao">
+  <div class="coluna">
+    <h2>O problema</h2>
+    <blockquote class="pergunta">
+      <p>Um LLM consegue transformar dados de reconhecimento passivo em hipóteses de vetores de ataque priorizadas, com qualidade comparável à de um analista especialista? A que custo e em quanto tempo?</p>
+    </blockquote>
+    <p>Três dificuldades tornam a pergunta menos simples do que parece:</p>
+    <dl class="dificuldades">
+      <dt>As fontes não valem o mesmo</dt>
+      <dd>Um subdomínio visto num certificado assinado é diferente de um nome que só o VirusTotal conhece. Uma versão lida agora no cabeçalho HTTP é diferente de uma varredura da Censys feita semanas atrás. Se o LLM não souber disso, trata boato e fato do mesmo jeito.</dd>
+      <dt>Não existe gabarito</dt>
+      <dd>Ninguém sabe quantos ativos o alvo tem de verdade nem quais hipóteses estão certas antes da fase ativa. A qualidade precisa ser julgada por um especialista, às cegas, e não por comparação com uma resposta pronta.</dd>
+      <dt>O contexto não cabe</dt>
+      <dd>O JSON enriquecido do shopify tem cerca de 11,6 mil tokens. O Llama local trabalha com janela de 8 mil. É preciso decidir o que o modelo vê, e essa decisão já é uma forma de análise.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ PROPOSTA ============ -->
+<section id="proposta" class="secao">
+  <div class="coluna">
+    <h2>A proposta</h2>
+    <p>Um pipeline de quatro módulos em Python. Cada etapa grava um JSON que a próxima lê, e cada dado carrega de onde veio. As cores abaixo indicam a natureza de cada fonte, e elas se repetem no resto do site.</p>
+    <ul class="legenda-natureza" aria-label="Legenda">
+      <li data-natureza="primeira">Primeira mão: observa o alvo agora</li>
+      <li data-natureza="vivo">Infraestrutura pública consultada ao vivo</li>
+      <li data-natureza="herdado">Herdado: reúne o que outra base já coletou</li>
+      <li data-natureza="llm">Modelo de linguagem</li>
+    </ul>
+  </div>
+
+  <ol class="pipeline">
+    <li class="modulo">
+      <h3><span class="m">M1</span> Coletor</h3>
+      <p class="faz">Domínio vira subdomínios, IPs e respostas HTTP. Hosts com a mesma assinatura são agrupados, o que corta cerca de 90% dos tokens.</p>
+      <ul class="fontes">
+        <li data-natureza="herdado"><b>subfinder</b> ~30 fontes passivas: CT logs, DNS passivo</li>
+        <li data-natureza="vivo"><b>dnsx</b> registros A e CNAME</li>
+        <li data-natureza="primeira"><b>httpx</b> status, título, tecnologia, versão</li>
+        <li data-natureza="herdado"><b>Censys</b> portas e software por IP</li>
+      </ul>
+      <p class="arq">m1_collector.py</p>
+    </li>
+    <li class="modulo">
+      <h3><span class="m">M2</span> Enriquecedor</h3>
+      <p class="faz">Software com versão vira CPE, CVE, gravidade e probabilidade de exploração. Um mapa de CPE curado evita casar “IIS 8.5” com o WebLogic 8.5.</p>
+      <ul class="fontes">
+        <li data-natureza="herdado"><b>NVD</b> CVE e CVSS, por CPE</li>
+        <li data-natureza="herdado"><b>EPSS</b> chance de exploração em 30 dias</li>
+      </ul>
+      <p class="arq">m2_enricher.py · m_confianca.py</p>
+    </li>
+    <li class="modulo">
+      <h3><span class="m">M3</span> Analisador</h3>
+      <p class="faz">Um filtro pontua cada grupo de hosts pelo interesse ofensivo e corta o contexto para ~3,5 mil tokens. O LLM devolve hipóteses num JSON Schema fixo, sempre citando a evidência.</p>
+      <ul class="fontes">
+        <li data-natureza="llm"><b>Llama 3.1 8B</b> local, Ollama</li>
+        <li data-natureza="llm"><b>Qwen 2.5 7B</b> local, Ollama</li>
+        <li data-natureza="llm" class="riscado"><b>Sonnet 5.5</b> recusou (cyber)</li>
+      </ul>
+      <p class="arq">m3_contexto.py · m3_analisador.py</p>
+    </li>
+    <li class="modulo">
+      <h3><span class="m">M4</span> Avaliação</h3>
+      <p class="faz">Hipóteses dos modelos e do analista humano vão para um mesmo conjunto embaralhado. O avaliador julga item a item sem saber a fonte, e cada julgamento é cronometrado.</p>
+      <ul class="fontes">
+        <li data-natureza="neutro"><b>Analista</b> lê o mesmo contexto do LLM</li>
+        <li data-natureza="neutro"><b>Métrica</b> % de hipóteses válidas e tempo</li>
+      </ul>
+      <p class="arq">m4_avaliacao.py</p>
+    </li>
+  </ol>
+
+  <div class="coluna">
+    <h3 class="sub">Como é uma hipótese</h3>
+    <p>Saída real do Llama 3.1 8B, prompt few-shot, alvo juice-shop, execução 1 de 20. Ainda não foi julgada.</p>
+    <pre class="json"><code>{
+  "vetor": "ambiente não produtivo exposto",
+  "hipotese": "A loja de demo está acessível para qualquer pessoa,
+               podendo conter vulnerabilidades conhecidas.",
+  "evidencia": "grupo juice-shop.herokuapp.com, status 200,
+                server Heroku, infra C1, 4 IPs",
+  "prioridade": 1,
+  "probabilidade": "média",
+  "validacao": "Verificar se há proteção contra scanners e se há
+                credenciais padrão."
+}</code></pre>
+    <p class="nota">A evidência é obrigatória: se o modelo citar algo que não está no contexto, a alucinação fica visível para o avaliador.</p>
+  </div>
+</section>
+
+<!-- ============ CONFIANÇA ============ -->
+<section id="confianca" class="secao">
+  <div class="coluna">
+    <h2>Quanto vale cada fonte</h2>
+    <p>Na quarta rodada o professor pediu para medir a confiança das fontes. A primeira resposta foi um quadro com notas dadas por julgamento. Na rodada seguinte cada eixo ganhou uma conta e um limiar fixo, calculados pelo <code>m_confianca.py</code> sobre os JSONs dos cinco alvos. Sete notas mudaram quando passaram a ser medidas, e cinco delas para pior.</p>
+  </div>
+
+  <div class="tabela-rolagem">
+    <table class="scorecard">
+      <caption>Scorecard medido, coleta de 03/11/2026. Entre parênteses, a nota dada por julgamento na rodada anterior, quando mudou.</caption>
+      <thead>
+        <tr><th scope="col">Fonte</th><th scope="col">Rendimento</th><th scope="col">Frescor</th><th scope="col">Verificabilidade</th><th scope="col">Origem</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row" data-natureza="herdado">subfinder</th><td data-nivel="alta">Alta <small>88,5%</small></td><td data-nivel="nd">n/d</td><td data-nivel="baixa">Baixa <small>1/3 (era Alta)</small></td><td>Herdado</td></tr>
+        <tr><th scope="row" data-natureza="vivo">dnsx</th><td data-nivel="nd">n/d</td><td data-nivel="alta">Alta <small>0 d</small></td><td data-nivel="media">Média <small>2/3 (era Alta)</small></td><td>Infra ao vivo</td></tr>
+        <tr><th scope="row" data-natureza="primeira">httpx</th><td data-nivel="alta">Alta <small>99,5% (era Média)</small></td><td data-nivel="alta">Alta <small>0 d</small></td><td data-nivel="media">Média <small>2/3 (era Alta)</small></td><td>Primeira mão</td></tr>
+        <tr><th scope="row" data-natureza="herdado">Censys</th><td data-nivel="baixa">Baixa <small>23,2%*</small></td><td data-nivel="nd">n/d</td><td data-nivel="baixa">Baixa <small>0/3 (era Média)</small></td><td>Herdado</td></tr>
+        <tr><th scope="row" data-natureza="herdado">NVD</th><td data-nivel="media">Média <small>75% (era Alta)</small></td><td data-nivel="nd">n/d</td><td data-nivel="alta">Alta <small>3/3</small></td><td>Correlação</td></tr>
+        <tr><th scope="row" data-natureza="herdado">EPSS</th><td data-nivel="alta">Alta <small>100%</small></td><td data-nivel="alta">Alta <small>1 d</small></td><td data-nivel="baixa">Baixa <small>1/3 (era Média)</small></td><td>Modelo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="coluna">
+    <details class="regua">
+      <summary>Como cada eixo é calculado</summary>
+      <dl>
+        <dt>Rendimento</dt><dd>O que a fonte devolveu dividido pelo que recebeu. Exemplo: subfinder = nomes que ainda resolvem ÷ nomes encontrados. Alta a partir de 80%, Média de 40% a 80%, Baixa abaixo de 40%. Não é cobertura, porque cobertura exigiria saber o total real de ativos, e esse gabarito não existe.</dd>
+        <dt>Frescor</dt><dd>Dias entre a observação do dado e a coleta. Alta até 1 dia, Média até 30, Baixa acima disso.</dd>
+        <dt>Verificabilidade</dt><dd>Soma de três perguntas de sim ou não: um terceiro reobtém o dado agora? Existe registro público assinado? O método é aberto? 3 é Alta, 2 é Média, 1 ou 0 é Baixa.</dd>
+        <dt>Origem</dt><dd>Se a fonte toca o alvo ou não. Categórica.</dd>
+      </dl>
+      <p class="nota">* Limite inferior: a única coleta com crédito no Censys (12/10) não registrou quais IPs foram consultados.</p>
+    </details>
+
+    <h3 class="sub">O que a medição revelou</h3>
+    <ul class="achados">
+      <li><span class="valor">2,9%</span><p>dos 10.610 subdomínios vieram de Certificate Transparency, a fonte mais auditável. 89% vieram do VirusTotal, que não é auditável. A nota “Alta” da rodada anterior presumia CT.</p></li>
+      <li><span class="valor">0,855</span><p>de concordância média (Jaccard) entre httpx e Censys nos 19 IPs do shopify em que as duas fontes disseram algo. Onde ambas enxergam, concordam.</p></li>
+      <li><span class="valor">23%</span><p>dos IPs consultados no Censys trouxeram software. É o pior rendimento do pipeline.</p></li>
+      <li><span class="valor">100%</span><p>dos CVEs do projeto saíram de versões vistas pelo httpx, a única fonte que toca o alvo.</p></li>
+    </ul>
+
+    <aside class="tensao">
+      <h3>A tensão que o projeto assume</h3>
+      <p>A fonte mais valiosa é justamente a única ativa. Um reconhecimento 100% passivo abriria mão da versão de software, que é o que o M2 transforma em CVE. A escolha foi chamar o pipeline de <strong>passivo com baixo contato</strong> e registrar isso como limitação, em vez de descartar o dado que sustenta o resto.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ EXPERIMENTO ============ -->
+<section id="experimento" class="secao">
+  <div class="coluna">
+    <h2>O experimento</h2>
+    <p>Quatro alvos, dois modelos abertos rodando localmente, duas técnicas de prompt e 20 execuções de cada combinação, para medir também a variabilidade do modelo. Os dois prompts são o <strong>few-shot</strong> (dois exemplos resolvidos antes do contexto) e o <strong>chain-of-thought</strong> (raciocínio explícito antes da resposta). Cada ponto abaixo é uma execução.</p>
+  </div>
+
+  <div class="grade-wrap">
+    <div id="grade" class="grade" role="img" aria-label="Progresso das execuções"></div>
+    <p id="grade-status" class="grade-status"></p>
+  </div>
+
+  <div class="coluna">
+    <h3 class="sub">Controles da comparação</h3>
+    <ul class="controles">
+      <li>Os modelos recebem exatamente as mesmas mensagens e o mesmo JSON Schema de saída.</li>
+      <li>O mesmo arquivo de contexto vai para o LLM e para o analista humano.</li>
+      <li>Não há troca automática de modelo: uma recusa fica registrada como recusa.</li>
+      <li>Avaliação cega, com código no lugar da fonte. A chave fica só com o autor.</li>
+      <li>Modelos com versão fixa, rodando offline: qualquer pessoa reproduz o resultado, e o dado do alvo não sai da máquina.</li>
+    </ul>
+
+    <h3 class="sub">Alvos</h3>
+    <p><b>testasp</b> e <b>testaspnet</b> (vulnweb) e o <b>OWASP Juice Shop</b> são aplicações vulneráveis de propósito, mantidas para teste, e incluem stacks antigas para exercitar o M2. O <b>shopify.com</b> entra pela escala: nele só se faz coleta passiva e a sondagem HTTP padrão do httpx. Um quinto alvo, o testphp, saiu do ar durante o semestre e ficou registrado como indisponível.</p>
+
+    <h3 class="sub">Resultados parciais</h3>
+    <div id="resultados"></div>
+    <p class="nota" id="resultados-nota"></p>
+  </div>
+</section>
+
+<!-- ============ EVOLUÇÃO ============ -->
+<section id="evolucao" class="secao">
+  <div class="coluna">
+    <h2>Evolução no semestre</h2>
+    <p>O projeto avançou em rodadas. Em cada uma o professor deu um retorno, e a rodada seguinte começou por ele.</p>
+  </div>
+  <ol class="linha-tempo">
+    <li>
+      <h3>Rodada 1</h3>
+      <p class="pedido">Fechar o escopo, fixar e justificar as ferramentas, separar baseline do autor, usar pelo menos dois modelos, estimar tokens e custo.</p>
+      <p>Escopo reduzido a três módulos. Ferramentas fixas: subfinder, dnsx, httpx e Censys. Baseline definido como um analista especialista. Sonnet 4.6 e Llama, custo estimado em ~US$ 0,92.</p>
+    </li>
+    <li>
+      <h3>Rodada 2</h3>
+      <p class="pedido">Justificar cada ferramenta, definir os domínios, avaliar a engenharia de prompt, estimar o custo do modelo pago.</p>
+      <p>Alvos definidos. Comparação few-shot contra chain-of-thought. ~US$ 0,023 por execução no Sonnet.</p>
+    </li>
+    <li>
+      <h3>Rodada 3</h3>
+      <p class="pedido">Duas execuções não têm significância: usar 10, 20 ou 30. Comparar custo e consumo de tokens.</p>
+      <p>20 execuções por combinação. Tabela de custo por execução para Opus, Sonnet e Llama.</p>
+    </li>
+    <li>
+      <h3>Rodada 4 <time datetime="2026-10-27">27/10</time></h3>
+      <p class="pedido">Relacionar as dependências das fontes, desenhar o fluxograma, medir a confiança, mostrar o que cada ferramenta coletou e dizer qual fonte é a melhor.</p>
+      <p>Fluxograma com a natureza de cada fonte. Scorecard de quatro eixos e corroboração cruzada. O pipeline deixou de ser chamado de “100% passivo”. Corrigido o casamento de CPE (IIS 8.5 caía no WebLogic 8.5).</p>
+    </li>
+    <li>
+      <h3>Rodada 5 <time datetime="2026-11-03">03/11</time></h3>
+      <p class="pedido">Transformar a confiança em número, enxugar o contexto, recoletar o alvo que caiu, rodar o M3.</p>
+      <p>Scorecard medido, com sete notas revistas. Filtro de contexto: shopify de 11,6 mil para 3,5 mil tokens. Chave do NVD (consultas 8× mais rápidas). Teste de fumaça: o Sonnet recusou e a Groq deixou de servir Llama, que passou a rodar local.</p>
+    </li>
+    <li class="agora">
+      <h3>Rodada 6 <time datetime="2026-11-10">10/11</time></h3>
+      <p class="pedido">Decidir o braço Claude, escolher um segundo modelo aberto, rodar o experimento, montar o baseline humano.</p>
+      <p>A recusa do Sonnet é mantida como resultado. Qwen 2.5 7B entra como segundo modelo. M4 com avaliação cega unificada e cronometrada. Experimento de 320 execuções em andamento.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ============ TROPEÇOS ============ -->
+<section id="tropecos" class="secao">
+  <div class="coluna">
+    <h2>O que deu errado</h2>
+    <p>Antes das 320 execuções, um teste com uma execução por combinação custou US$ 0,01 e pegou quatro destes problemas.</p>
+    <dl class="tropecos">
+      <dt>O Sonnet 5.5 recusou</dt>
+      <dd>As duas variantes de prompt pararam com <code>stop_reason: refusal</code>, categoria cyber, sem nenhum token de saída. O prompt não foi reescrito para contornar o filtro, porque isso invalidaria o braço. Um braço Claude, se houver, passa pelo canal oficial da Anthropic para pesquisa em segurança.</dd>
+      <dt>A Groq parou de servir Llama</dt>
+      <dd>A chamada devolveu 404. O Llama 3.1 8B passou a rodar na própria máquina via Ollama: CPU de 16 núcleos, sem GPU, ~20 a 55 s por execução, custo de API zero.</dd>
+      <dt>Tokens subestimados</dt>
+      <dd>O Sonnet usou 2,2× os tokens de entrada estimados. O custo previsto foi refeito com o fator medido: ~US$ 3,06 para 160 execuções.</dd>
+      <dt>Configuração errada do Sonnet 4.6</dt>
+      <dd>O modo com pensamento desligado do 5.5 não existe no 4.6, e a API devolveu erro 400. Foi um erro no código, e esse braço não chegou a rodar.</dd>
+      <dt>O coletor perdia dados no timeout</dt>
+      <dd>Quando uma ferramenta estourava o tempo, tudo o que ela já tinha coletado era descartado. Agora a saída parcial é mantida e o corte fica registrado em <code>meta.stats.timeout</code>.</dd>
+      <dt>O NVD atrasa</dt>
+      <dd>A versão 2026.10.0 do Discourse que aparece no shopify ainda não existe no NVD. Software recente fica sem CVE mesmo quando tem versão.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ PRÓXIMOS ============ -->
+<section id="proximos" class="secao">
+  <div class="coluna">
+    <h2>Próximos passos</h2>
+    <ol class="passos">
+      <li><b>Concluir as 320 execuções</b> com Llama e Qwen nos quatro alvos (~3,5 h de CPU, retomável).</li>
+      <li><b>Coletar o baseline humano.</b> O analista lê os mesmos contextos e escreve suas hipóteses, com o tempo cronometrado.</li>
+      <li><b>Avaliar às cegas</b> o conjunto embaralhado de hipóteses dos modelos e do humano.</li>
+      <li><b>Calcular a métrica final:</b> % de hipóteses válidas por fonte, tempo de produção humano contra a latência do LLM, e variabilidade entre execuções.</li>
+      <li><b>Medir o frescor do Censys</b> com uma coleta com crédito, para saber a idade real do dado herdado.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer class="rodape">
+  <div class="coluna">
+    <p><b>ReconAI</b> é o projeto de Elton Lunardi na disciplina Laboratório de Inteligência Artificial Aplicada (LIAA), Mestrado Profissional em Computação Aplicada, 2026.</p>
+    <p>Todo reconhecimento foi feito contra alvos de teste públicos ou de forma passiva, para uso em pentest autorizado. O LLM não coleta nada: só interpreta dados que já foram coletados.</p>
+    <p class="atualizado" id="atualizado"></p>
+  </div>
+</footer>
+
+<div id="apres-hud" class="apres-hud" hidden>
+  <span id="apres-pos"></span>
+  <span class="dica">← → para navegar, P ou Esc para sair</span>
+</div>
+
+<script src="data/experimento.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

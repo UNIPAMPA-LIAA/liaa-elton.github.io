@@ -319,3 +319,165 @@ body.apresentando .rodape { display: none; }
   .topo, .apres-hud { display: none; }
   .secao { break-inside: avoid-page; padding: 32px 0; }
 }
+
+/* =====================================================================
+   Rodada 7: organograma, coleta, régua nova, comparativo e custo
+   Cores de gráfico validadas com o validador do skill de dataviz
+   (modelos: azul/laranja; mapa: violeta/verde-água/amarelo, todos os pares).
+   ===================================================================== */
+:root {
+  --m-llama: #2a78d6; --m-qwen: #eb6834;
+  --c-4xx: #6250d6; --c-outro: #1baf7a; --c-sem: #eda100;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --m-llama: #3987e5; --m-qwen: #d95926;
+    --c-4xx: #9085e9; --c-outro: #199e70; --c-sem: #c98500;
+  }
+}
+:root[data-theme="dark"] {
+  --m-llama: #3987e5; --m-qwen: #d95926;
+  --c-4xx: #9085e9; --c-outro: #199e70; --c-sem: #c98500;
+}
+[data-modelo="llama"] { --cor: var(--m-llama); }
+[data-modelo="qwen"] { --cor: var(--m-qwen); }
+.cel[data-modelo="llama"], .cel[data-modelo="qwen"] { --cor: inherit; }
+.cel[data-modelo="llama"] { --cor: var(--m-llama); }
+.cel[data-modelo="qwen"] { --cor: var(--m-qwen); }
+th[data-modelo] { border-left: 4px solid var(--cor); }
+
+/* organograma do pentest */
+.organo { max-width: 1180px; margin: 40px auto 0; }
+.organo-raiz {
+  font: 600 1.05rem var(--f-display); text-align: center; padding: 12px 18px;
+  border: 2px solid var(--tinta); border-radius: 8px; max-width: 320px; margin: 0 auto 28px; position: relative;
+}
+.organo-raiz::after { content: ""; position: absolute; left: 50%; bottom: -28px; height: 28px; border-left: 2px solid var(--regua); }
+.organo-fases {
+  list-style: none; margin: 0; padding: 18px 0 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px; counter-reset: fase; border-top: 2px solid var(--regua);
+}
+.organo-fases > li {
+  counter-increment: fase; font-family: var(--f-display); font-size: .88rem; line-height: 1.3;
+  border: 1px solid var(--regua); border-radius: 6px; padding: 10px 10px 12px; position: relative; background: var(--papel);
+}
+.organo-fases > li::before { content: counter(fase); display: block; font-weight: 800; color: var(--tinta-2); margin-bottom: 4px; }
+.organo-fases > li > b { display: block; font-weight: 600; }
+.organo-fases > li > span, .organo-sub span { display: block; color: var(--tinta-2); font-size: .8rem; margin-top: 4px; }
+.organo-fases > li.com-reconai { border-color: var(--tinta); border-width: 2px; }
+.organo-sub { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
+.organo-sub li { border-left: 3px solid var(--regua); padding: 4px 0 4px 8px; font-size: .82rem; }
+.organo-sub li.reconai { border-left-color: var(--llm); background: color-mix(in srgb, var(--llm) 8%, transparent); }
+.organo figcaption { font: .85rem var(--f-display); color: var(--tinta-2); margin-top: 12px; text-align: center; }
+@media (max-width: 960px) {
+  .organo-fases { grid-template-columns: minmax(0, 1fr); border-top: 0; border-left: 2px solid var(--regua); padding: 0 0 0 16px; }
+  .organo-raiz { margin-left: 0; }
+  .organo-raiz::after { left: 16px; }
+}
+
+/* cascata de fontes do subfinder */
+.cascata { list-style: none; padding: 0; margin: 20px 0 28px; display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; font-family: var(--f-display); }
+.cascata li { flex: 1 1 140px; border: 1px solid var(--regua); border-radius: 6px; padding: 10px 12px; position: relative; }
+.cascata li b { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+.cascata li span { font-size: .85rem; color: var(--tinta-2); }
+.cascata li:last-child { border: 2px solid var(--herdado); }
+
+/* barras horizontais (fontes) */
+.barras-h { display: grid; gap: 10px; margin: 16px 0 8px; font-family: var(--f-display); }
+.barra-linha { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 4.5rem; gap: 12px; align-items: center; font-size: .9rem; }
+.barra-linha .rot small { display: block; color: var(--tinta-2); font-size: .75rem; line-height: 1.2; }
+.barra-trilho { height: 18px; display: flex; gap: 2px; }
+.barra-trilho i { display: block; height: 100%; min-width: 2px; }
+.barra-trilho i.exc { background: var(--herdado); border-radius: 4px 0 0 4px; }
+.barra-trilho i.comp {
+  background: repeating-linear-gradient(45deg, var(--herdado) 0 2px, transparent 2px 6px);
+  border: 1px solid var(--herdado); border-radius: 0 4px 4px 0;
+}
+.barra-trilho i:only-child { border-radius: 4px; }
+.barra-linha .val { font-variant-numeric: tabular-nums; text-align: right; }
+.legenda-barras { display: flex; gap: 18px; font: .82rem var(--f-display); color: var(--tinta-2); margin-bottom: 4px; }
+.legenda-barras i { display: inline-block; width: 14px; height: 10px; margin-right: 6px; vertical-align: baseline; }
+@media (max-width: 520px) { .barra-linha { grid-template-columns: 6.5rem minmax(0, 1fr) 3.6rem; gap: 8px; } }
+
+/* upset (combinações) */
+.upset { border-collapse: collapse; font-family: var(--f-display); font-size: .88rem; margin: 12px 0; min-width: 520px; width: 100%; }
+.upset th, .upset td { padding: 6px 8px; border-bottom: 1px solid var(--regua); text-align: center; }
+.upset thead th { font-size: .78rem; color: var(--tinta-2); font-weight: 600; border-bottom: 2px solid var(--tinta); }
+.upset td.ponto span { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--regua); }
+.upset td.ponto.on span { background: var(--tinta); border-color: var(--tinta); }
+.upset td.qtd { text-align: left; width: 40%; }
+.upset td.qtd div { display: flex; align-items: center; gap: 8px; }
+.upset td.qtd i { display: block; height: 12px; background: var(--herdado); border-radius: 0 4px 4px 0; min-width: 2px; }
+.achados-curtos { padding-left: 1.2em; }
+.achados-curtos li { margin-bottom: .5em; }
+
+/* mapa (waffle) */
+.legenda-mapa { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font: .9rem var(--f-display); }
+.legenda-mapa li { display: flex; align-items: center; gap: 8px; }
+.legenda-mapa li i { width: 12px; height: 12px; border-radius: 2px; background: var(--cor); flex: none; }
+.legenda-mapa b { font-variant-numeric: tabular-nums; }
+.mapa-wrap { max-width: 760px; margin: 0 auto; position: relative; }
+.mapa { display: grid; grid-template-columns: repeat(auto-fill, 9px); gap: 2px; }
+.mapa i { width: 9px; height: 9px; border-radius: 1px; background: var(--cor); }
+.mapa i.foco { outline: 2px solid var(--tinta); outline-offset: 0; }
+[data-classe="4xx"] { --cor: var(--c-4xx); }
+[data-classe="outro"] { --cor: var(--c-outro); }
+[data-classe="sem"] { --cor: var(--c-sem); }
+.dica-flutuante {
+  position: fixed; z-index: 40; pointer-events: none; max-width: 280px;
+  background: var(--tinta); color: var(--papel); font: .82rem/1.4 var(--f-display); padding: 8px 10px; border-radius: 6px;
+}
+.dica-flutuante[hidden] { display: none; }
+@media (max-width: 520px) { .mapa { grid-template-columns: repeat(auto-fill, 6px); gap: 1px; } .mapa i { width: 6px; height: 6px; } }
+
+/* perdas */
+.perdas { display: grid; gap: 20px; }
+.perda { border: 1px solid var(--regua); border-radius: 8px; padding: 16px 18px; }
+.perda h4 { margin: 0 0 8px; font: 600 1rem var(--f-display); }
+.perda .etapas { display: grid; gap: 6px; font: .9rem var(--f-display); margin: 10px 0; }
+.perda .etapa { display: grid; grid-template-columns: minmax(0, 1fr) 5rem; gap: 10px; align-items: center; }
+.perda .etapa .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.perda .etapa.perdeu .num { color: var(--tinta); }
+.perda .etapa.perdeu span:first-child::before { content: "−"; margin-right: 6px; color: var(--tinta-2); font-weight: 800; }
+.perda p { margin: 0; font-size: 1rem; }
+.perda code { font-size: .8em; }
+
+/* régua nova */
+.regua-tab { width: 100%; max-width: 980px; margin: 0 auto; border-collapse: collapse; font-family: var(--f-display); font-size: .9rem; min-width: 640px; }
+.regua-tab caption { text-align: left; font-size: .88rem; color: var(--tinta-2); padding-bottom: 12px; }
+.regua-tab th, .regua-tab td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--regua); }
+.regua-tab thead th { font-size: .85rem; color: var(--tinta-2); border-bottom: 2px solid var(--tinta); }
+.regua-tab tbody th { font-weight: 600; width: 22%; }
+.regua-tab tbody th small { display: block; font-weight: 400; color: var(--tinta-2); font-size: .78rem; margin-top: 2px; }
+.nova-regua td { font-variant-numeric: tabular-nums; }
+.tabela-rolagem + .tabela-rolagem { margin-top: 32px; }
+.medido, .proposto { font: 600 .72rem var(--f-display); padding: 1px 6px; border-radius: 4px; margin-left: 4px; white-space: nowrap; }
+.medido { background: var(--tinta); color: var(--papel); }
+.proposto { border: 1px solid var(--tinta-2); color: var(--tinta-2); }
+.modelos td, .limites td { font-size: .9rem; }
+.limites td:last-child { min-width: 22rem; line-height: 1.45; }
+
+/* comparativo (small multiples) */
+.legenda-modelos { list-style: none; padding: 0; margin: 8px 0 0; display: flex; gap: 20px; font: .9rem var(--f-display); }
+.legenda-modelos li { display: flex; align-items: center; gap: 8px; }
+.legenda-modelos li::before { content: ""; width: 12px; height: 12px; border-radius: 2px; background: var(--cor); }
+.comparativo {
+  max-width: 1180px; margin: 24px auto 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px 36px;
+  font-family: var(--f-display);
+}
+.painel h4 { font: 600 1rem var(--f-display); margin: 0 0 2px; }
+.painel p { font-size: .8rem; color: var(--tinta-2); margin: 0 0 10px; }
+.painel .linha { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 10px; align-items: center; margin-bottom: 6px; font-size: .85rem; }
+.painel .linha .rot { color: var(--tinta-2); }
+.painel .trilho { display: flex; align-items: center; gap: 8px; }
+.painel .trilho i { display: block; height: 16px; background: var(--cor); border-radius: 0 4px 4px 0; min-width: 2px; }
+.painel .trilho i.cot { background: repeating-linear-gradient(45deg, var(--cor) 0 3px, color-mix(in srgb, var(--cor) 45%, var(--papel)) 3px 6px); }
+.painel .trilho span { font-variant-numeric: tabular-nums; color: var(--tinta); font-size: .82rem; white-space: nowrap; }
+.custo-tab { width: 100%; border-collapse: collapse; font-family: var(--f-display); font-size: .92rem; }
+.custo-tab th, .custo-tab td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--regua); vertical-align: top; }
+.custo-tab thead th { font-size: .82rem; color: var(--tinta-2); border-bottom: 2px solid var(--tinta); }
+.custo-tab td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+.custo-tab td small { display: block; color: var(--tinta-2); font-size: .78rem; }
+.custo-tab tr.real td { background: color-mix(in srgb, var(--primeira) 8%, transparent); }
+.tabela-rolagem + .grade-wrap { margin-top: 56px; }
+.cascata li span { display: block; line-height: 1.35; margin-top: 4px; }

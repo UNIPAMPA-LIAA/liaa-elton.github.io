@@ -1,6 +1,6 @@
 // Gerado por tools/atualizar_dados.py — não editar à mão.
 window.EXPERIMENTO = {
- "gerado_em": "11/11/2026 23:09",
+ "gerado_em": "12/11/2026 17:54",
  "runs": 20,
  "planejado": 320,
  "feitas": 320,
@@ -665,6 +665,145 @@ window.EXPERIMENTO = {
    }
   }
  ],
+ "tecnicas": [
+  {
+   "modelo": "llama",
+   "prompt": "fewshot",
+   "n": 80,
+   "hip_med": 3.2,
+   "dp_dentro_alvo": 0.59,
+   "fora_faixa_pct": 18.8,
+   "lat_med": 27.8,
+   "tin_med": 2661,
+   "tout_med": 440,
+   "tin_tot": 212880,
+   "tout_tot": 35223,
+   "lat_tot": 2226,
+   "tok_por_hip": 138,
+   "erros": 0
+  },
+  {
+   "modelo": "llama",
+   "prompt": "cot",
+   "n": 80,
+   "hip_med": 5.53,
+   "dp_dentro_alvo": 1.95,
+   "fora_faixa_pct": 16.2,
+   "lat_med": 55.7,
+   "tin_med": 1458,
+   "tout_med": 927,
+   "tin_tot": 116640,
+   "tout_tot": 74158,
+   "lat_tot": 4459,
+   "tok_por_hip": 168,
+   "erros": 0
+  },
+  {
+   "modelo": "qwen",
+   "prompt": "fewshot",
+   "n": 80,
+   "hip_med": 4.53,
+   "dp_dentro_alvo": 0.64,
+   "fora_faixa_pct": 23.8,
+   "lat_med": 29.6,
+   "tin_med": 2786,
+   "tout_med": 659,
+   "tin_tot": 222880,
+   "tout_tot": 52731,
+   "lat_tot": 2372,
+   "tok_por_hip": 146,
+   "erros": 0
+  },
+  {
+   "modelo": "qwen",
+   "prompt": "cot",
+   "n": 80,
+   "hip_med": 6.04,
+   "dp_dentro_alvo": 1.9,
+   "fora_faixa_pct": 11.2,
+   "lat_med": 56.5,
+   "tin_med": 1534,
+   "tout_med": 1327,
+   "tin_tot": 122720,
+   "tout_tot": 106125,
+   "lat_tot": 4519,
+   "tok_por_hip": 220,
+   "erros": 0
+  }
+ ],
+ "custo": [
+  {
+   "opcao": "Llama e Qwen hospedados (as 320, tokens medidos)",
+   "usd": 0.0916,
+   "obs": "cada modelo pelo seu preço"
+  },
+  {
+   "opcao": "Claude Haiku 5.5 (as 320, se não recusasse)",
+   "usd": 0.28,
+   "obs": "entrada × 1.91 (few-shot) e × 2.55 (CoT)"
+  },
+  {
+   "opcao": "Claude Sonnet 5.5 (as 320, se não recusasse)",
+   "usd": 5.57,
+   "obs": "entrada × 1.91 (few-shot) e × 2.55 (CoT)"
+  },
+  {
+   "opcao": "Claude Sonnet 4.6 (as 320, se não recusasse)",
+   "usd": 8.35,
+   "obs": "entrada × 1.91 (few-shot) e × 2.55 (CoT)"
+  },
+  {
+   "opcao": "Claude Opus 5.5 (as 320, se não recusasse)",
+   "usd": 11.14,
+   "obs": "entrada × 1.91 (few-shot) e × 2.55 (CoT)"
+  },
+  {
+   "opcao": "Local, na máquina (energia)",
+   "usd": 0.0,
+   "brl": 0.27,
+   "obs": "3.8 h × 80 W = 0.30 kWh a R$ 0.90/kWh"
+  }
+ ],
+ "tokens_tot": {
+  "entrada": 675120,
+  "saida": 268237
+ },
+ "precos": {
+  "llama_hosp": {
+   "nome": "Llama 3.1 8B hospedado (OpenRouter)",
+   "entrada": 0.05,
+   "saida": 0.08
+  },
+  "qwen_hosp": {
+   "nome": "Qwen 2.5 7B hospedado (OpenRouter)",
+   "entrada": 0.1,
+   "saida": 0.2
+  },
+  "haiku55": {
+   "nome": "Claude Haiku 5.5",
+   "entrada": 0.1,
+   "saida": 0.5
+  },
+  "sonnet55": {
+   "nome": "Claude Sonnet 5.5",
+   "entrada": 2.0,
+   "saida": 10.0
+  },
+  "sonnet46": {
+   "nome": "Claude Sonnet 4.6",
+   "entrada": 3.0,
+   "saida": 15.0
+  },
+  "opus55": {
+   "nome": "Claude Opus 5.5",
+   "entrada": 4.0,
+   "saida": 20.0
+  }
+ },
+ "fator_claude": {
+  "fewshot": 1.91,
+  "cot": 2.55
+ },
  "humano": [],
  "avaliacao_cega": []
 };

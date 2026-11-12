@@ -85,7 +85,7 @@
       ag += `<tr><td><b>${esc(D.modelos[m])}</b><br>${esc(D.prompts[p])}</td>` +
         `<td class="num">${n}</td>` +
         `<td class="num">${fmt(media(hs), 2)} <small>desvio ${fmt(dp(hs), 2)}, de ${Math.min(...hs)} a ${Math.max(...hs)}</small></td>` +
-        `<td><div class="tira hist" style="--cor:var(--${m === "qwen" ? "vivo" : "llm"})" role="img" aria-label="Execuções por número de hipóteses: ${cont.join(", ")}">${hist}</div></td>` +
+        `<td><div class="tira hist" style="--cor:var(--m-${m})" role="img" aria-label="Execuções por número de hipóteses: ${cont.join(", ")}">${hist}</div></td>` +
         `<td class="num">${fmt(lat)} s</td></tr>`;
     }));
     r.innerHTML = ag + "</tbody></table></div>";
@@ -100,7 +100,7 @@
         `<td class="num">${s.n}</td>` +
         `<td class="num">${fmt(s.lat_med)} s <small>± ${fmt(s.lat_dp)}</small></td>` +
         `<td class="num">${fmt(s.hip_med, 2)} <small>(${s.hip_min} a ${s.hip_max})</small></td>` +
-        `<td><div class="tira" data-modelo="${c.modelo}" style="--cor:var(--${c.modelo === "qwen" ? "vivo" : "llm"})" role="img" aria-label="Hipóteses por execução: ${s.hip_por_run.join(", ")}">${tira}</div></td></tr>`;
+        `<td><div class="tira" data-modelo="${c.modelo}" style="--cor:var(--m-${c.modelo})" role="img" aria-label="Hipóteses por execução: ${s.hip_por_run.join(", ")}">${tira}</div></td></tr>`;
     });
     h += "</tbody></table></div>";
     $("#resultados-alvo").innerHTML = h;
@@ -159,7 +159,158 @@
   });
   document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && ativo) alternar(false); });
 
+  /* =================== Rodada 7 =================== */
+  const C = window.COLETA || null;
+  const int = (n) => Number(n).toLocaleString("pt-BR");
+  const pct = (a, b) => fmt((100 * a) / b, 1);
+
+  /* dica flutuante compartilhada */
+  const dica = document.createElement("div");
+  dica.className = "dica-flutuante"; dica.hidden = true; dica.setAttribute("role", "tooltip");
+  document.body.appendChild(dica);
+  function mostrar(e, html) {
+    dica.innerHTML = html; dica.hidden = false;
+    const x = Math.min(e.clientX + 14, innerWidth - dica.offsetWidth - 8);
+    const y = Math.min(e.clientY + 14, innerHeight - dica.offsetHeight - 8);
+    dica.style.left = x + "px"; dica.style.top = y + "px";
+  }
+  const esconder = () => { dica.hidden = true; };
+
+  function fontes() {
+    if (!C) return;
+    const S = C.subfinder;
+    const cfg = S.chaves_configuradas.length;
+    const consultadas = S.sem_chave.length + S.chave_opcional.length + cfg;
+    const passos = [
+      [S.total_fontes, "fontes que o subfinder conhece"],
+      [S.total_fontes - consultadas, "exigem chave de acesso e não estavam configuradas"],
+      [consultadas, `consultadas: ${S.sem_chave.length} sem chave, ${S.chave_opcional.length} com chave opcional e ${cfg} com chave configurada`],
+      [S.fontes.length, "devolveram nomes para o shopify.com"],
+      [S.unicos, "nomes únicos depois de juntar tudo"],
+    ];
+    $("#cascata-fontes").innerHTML = passos.map(([n, t]) => `<li><b>${int(n)}</b><span>${esc(t)}</span></li>`).join("");
+
+    const max = Math.max(...S.fontes.map((f) => f.nomes));
+    let h = '<div class="legenda-barras"><span><i style="background:var(--herdado)"></i>só esta fonte viu</span>' +
+      '<span><i style="background:repeating-linear-gradient(45deg,var(--herdado) 0 2px,transparent 2px 5px);border:1px solid var(--herdado)"></i>outra fonte também viu</span></div>';
+    S.fontes.forEach((f) => {
+      const comp = f.nomes - f.exclusivos;
+      const seg = (v, cls) => (v ? `<i class="${cls}" style="width:${(100 * v) / max}%"></i>` : "");
+      h += `<div class="barra-linha" title="${esc(f.fonte)}: ${int(f.nomes)} nomes, ${int(f.exclusivos)} só nela">` +
+        `<span class="rot"><b>${esc(f.fonte)}</b><small>${esc(f.tipo)}</small></span>` +
+        `<span class="barra-trilho">${seg(f.exclusivos, "exc")}${seg(comp, "comp")}</span>` +
+        `<span class="val">${int(f.nomes)}</span></div>`;
+    });
+    $("#fontes-barras").innerHTML = h;
+
+    const nomesF = S.fontes.map((f) => f.fonte);
+    const maxC = Math.max(...S.combinacoes.map((c) => c.nomes));
+    let u = "<thead><tr>" + nomesF.map((f) => `<th scope="col">${esc(f)}</th>`).join("") + '<th scope="col">Nomes</th></tr></thead><tbody>';
+    S.combinacoes.forEach((c) => {
+      u += "<tr>" + nomesF.map((f) => `<td class="ponto${c.fontes.includes(f) ? " on" : ""}"><span aria-label="${c.fontes.includes(f) ? "sim" : "não"}"></span></td>`).join("") +
+        `<td class="qtd"><div><i style="width:${Math.max(0.4, (100 * c.nomes) / maxC)}%"></i>${int(c.nomes)}</div></td></tr>`;
+    });
+    $("#upset").innerHTML = u + "</tbody>";
+
+    const vt = S.fontes.find((f) => f.fonte === "virustotal");
+    const ct = S.fontes.find((f) => f.fonte === "crtsh");
+    const htSempreComDd = S.combinacoes.filter((c) => c.fontes.includes("hackertarget")).every((c) => c.fontes.includes("dnsdumpster"));
+    const itens = [
+      `Só <b>${int(S.em_2_ou_mais)}</b> dos ${int(S.unicos)} nomes (${pct(S.em_2_ou_mais, S.unicos)}%) foram vistos por duas fontes ou mais. Quase nada é confirmado por uma segunda fonte.`,
+      vt ? `<b>${int(vt.exclusivos)}</b> nomes (${pct(vt.exclusivos, S.unicos)}%) vieram só do VirusTotal, uma base fechada de DNS passivo.` : "",
+      ct ? `O Certificate Transparency (crt.sh), a única fonte auditável, trouxe ${int(ct.nomes)} nomes, e ${int(ct.exclusivos)} deles nenhuma outra fonte viu.` : "",
+      htSempreComDd ? "Todo nome da HackerTarget também aparece no DNSDumpster, que é um projeto da mesma empresa. As duas concordarem não é confirmação independente." : "",
+    ].filter(Boolean);
+    $("#fontes-achados").innerHTML = itens.map((t) => `<li>${t}</li>`).join("");
+  }
+
+  function mapa() {
+    if (!C) return;
+    const M = C.mapa;
+    const desc = { "4xx": "respondeu com erro 4xx, quase todo lojas desativadas", outro: "respondeu com página, redirecionamento ou erro de servidor (2xx, 3xx, 5xx)", sem: "não respondeu HTTP" };
+    $("#legenda-mapa").innerHTML = ["4xx", "outro", "sem"].map((k) =>
+      `<li data-classe="${k}"><i></i><span><b>${int(M.classes[k])}</b> ${esc(desc[k])}</span></li>`).join("");
+    const el = $("#mapa");
+    let h = "";
+    M.grupos.forEach((g, gi) => { for (let i = 0; i < g.n; i++) h += `<i data-classe="${g.classe}" data-g="${gi}"></i>`; });
+    el.innerHTML = h;
+    el.setAttribute("aria-label", `Mapa de ${int(M.total)} hosts: ${int(M.classes["4xx"])} com erro 4xx, ${int(M.classes.outro)} com outras respostas, ${int(M.classes.sem)} sem resposta HTTP`);
+    let atualG = -1;
+    const marcar = (gi) => {
+      if (gi === atualG) return;
+      el.querySelectorAll("i.foco").forEach((x) => x.classList.remove("foco"));
+      if (gi >= 0) el.querySelectorAll(`i[data-g="${gi}"]`).forEach((x) => x.classList.add("foco"));
+      atualG = gi;
+    };
+    el.addEventListener("mousemove", (e) => {
+      const t = e.target.closest("i[data-g]");
+      if (!t) { esconder(); marcar(-1); return; }
+      const g = M.grupos[+t.dataset.g];
+      marcar(+t.dataset.g);
+      mostrar(e, `<b>${int(g.n)} host${g.n > 1 ? "s" : ""}</b><br>${g.status ? "status " + g.status : "sem resposta HTTP"}` +
+        `${g.titulo ? "<br>“" + esc(g.titulo) + "”" : ""}<br>ex.: ${esc(g.ex[0] || "")}`);
+    });
+    el.addEventListener("mouseleave", () => { esconder(); marcar(-1); });
+
+    const R = C.recoleta;
+    const sem = M.classes.sem;
+    const ex = M.sem_http_exemplos;
+    const etapa = (t, n, perdeu) => `<div class="etapa${perdeu ? " perdeu" : ""}"><span>${t}</span><span class="num">${int(n)}</span></div>`;
+    $("#perdas").innerHTML =
+      `<div class="perda"><h4>Coleta de 12/10, a do experimento</h4><div class="etapas">` +
+      etapa("resolvem no DNS", M.total) + etapa("não responderam HTTP", sem, true) + etapa("responderam", M.total - sem) + `</div>` +
+      `<p>Os ${sem} que não responderam são <code>${esc(ex[0] || "")}</code> a <code>o${sem}.mailer.shopify.com</code>: servidores de envio de e-mail. Eles existem no DNS, mas não têm site, e por isso não respondem HTTP. Essa coleta não registrou os nomes que o subfinder achou e que já não resolviam.</p></div>` +
+      `<div class="perda"><h4>Recoleta de 03/11</h4><div class="etapas">` +
+      etapa("encontrados pelo subfinder", R.encontrados) + etapa("não resolvem mais no DNS", R.encontrados - R.resolvem, true) +
+      etapa("resolvem", R.resolvem) + etapa("resolvem, mas não respondem HTTP", R.resolvem - R.http, true) + etapa("responderam", R.http) + `</div>` +
+      `<p>Os ${int(R.encontrados - R.resolvem)} que não resolvem são nomes antigos que continuam guardados nas bases de DNS passivo, mas já foram desligados. Essa perda é o que o rendimento do subfinder mede no scorecard: no shopify, ${pct(R.resolvem, R.encontrados)}% dos nomes ainda resolvem.</p></div>`;
+  }
+
+  function comparativo() {
+    if (!D || !D.tecnicas || !D.tecnicas.length) return;
+    const P = D.precos;
+    const T = D.tecnicas.map((t) => {
+      const pr = P[t.modelo + "_hosp"];
+      return { ...t, custo1000: ((t.tin_med * pr.entrada + t.tout_med * pr.saida) / 1e6) * 1000 };
+    });
+    const metricas = [
+      ["hip_med", "Hipóteses por execução", "média das 80 execuções; mais não é melhor até a avaliação cega", (v) => fmt(v, 2)],
+      ["dp_dentro_alvo", "Variação entre execuções", "desvio no mesmo alvo, em hipóteses; menor é mais previsível", (v) => fmt(v, 2)],
+      ["fora_faixa_pct", "Fora da faixa de 3 a 10", "% das execuções que desobedeceram o prompt", (v) => fmt(v, 1) + "%"],
+      ["lat_med", "Latência", "segundos por execução, CPU sem GPU", (v) => fmt(v, 1) + " s"],
+      ["tin_med", "Tokens de entrada", "por execução; o CoT não leva os dois exemplos", (v) => int(v)],
+      ["tout_med", "Tokens de saída", "por execução", (v) => int(v)],
+      ["tok_por_hip", "Tokens por hipótese", "saída dividida pelo número de hipóteses", (v) => int(v)],
+      ["custo1000", "Custo se fosse hospedado", "US$ por 1.000 execuções, preço do próprio modelo", (v) => "US$ " + fmt(v, 3)],
+    ];
+    $("#comparativo").innerHTML = metricas.map(([k, titulo, sub, f]) => {
+      const max = Math.max(...T.map((t) => t[k]));
+      return `<div class="painel"><h4>${titulo}</h4><p>${sub}</p>` + T.map((t) =>
+        `<div class="linha" data-modelo="${t.modelo}"><span class="rot">${esc(D.modelos[t.modelo].split(" ")[0])} ${t.prompt === "cot" ? "CoT" : "few-shot"}</span>` +
+        `<span class="trilho"><i class="${t.prompt}" style="width:${(85 * t[k]) / max}%" title="${esc(D.modelos[t.modelo])}, ${esc(D.prompts[t.prompt])}: ${f(t[k])}"></i><span>${f(t[k])}</span></span></div>`).join("") + "</div>";
+    }).join("");
+  }
+
+  function custo() {
+    if (!D || !D.custo || !D.custo.length) return;
+    const n = D.feitas || 320;
+    $("#custo-intro").textContent = `As ${n} execuções consumiram ${int(D.tokens_tot.entrada)} tokens de entrada e ${int(D.tokens_tot.saida)} de saída, contados pelo Ollama. Rodando na máquina, o custo de API foi zero. A tabela estima quanto as mesmas execuções custariam em outras opções.`;
+    const local = D.custo.find((c) => c.brl !== undefined);
+    const resto = D.custo.filter((c) => c !== local);
+    let h = '<div class="res-wrap"><table class="custo-tab"><thead><tr><th scope="col">Opção</th><th scope="col">Custo das ' + n + '</th><th scope="col">Por execução</th></tr></thead><tbody>';
+    if (local) h += `<tr class="real"><td><b>Local, como foi feito</b><small>${esc(local.obs.replace(/\./g, ","))}</small></td><td class="num">R$ ${fmt(local.brl, 2)}</td><td class="num">US$ 0 de API</td></tr>`;
+    resto.forEach((c) => {
+      h += `<tr><td><b>${esc(c.opcao)}</b><small>${esc(c.obs.replace(/(\d)\.(\d)/g, "$1,$2"))}</small></td>` +
+        `<td class="num">US$ ${fmt(c.usd, c.usd < 1 ? 3 : 2)}</td><td class="num">US$ ${fmt(c.usd / n, 4)}</td></tr>`;
+    });
+    $("#custo").innerHTML = h + "</tbody></table></div>";
+  }
+
   grade();
   resultados();
   atualizado();
+  fontes();
+  mapa();
+  comparativo();
+  custo();
 })();

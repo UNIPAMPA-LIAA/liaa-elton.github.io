@@ -21,6 +21,7 @@
     <a href="#contexto">Contexto</a>
     <a href="#problema">Problema</a>
     <a href="#proposta">Proposta</a>
+    <a href="#coleta">Coleta</a>
     <a href="#confianca">Fontes</a>
     <a href="#experimento">Experimento</a>
     <a href="#evolucao">Evolução</a>
@@ -62,7 +63,32 @@
     <p>Todo teste de intrusão autorizado começa pelo reconhecimento. Antes de enviar qualquer carga ao alvo, o analista precisa saber o que existe: quais subdomínios, quais servidores, que software e em que versão. Quanto menos o reconhecimento toca o alvo, menor o risco de derrubar um serviço ou disparar alarmes, e por isso a primeira fase costuma ser <em>passiva</em>. Ela consulta bases públicas que outros já coletaram: logs de Certificate Transparency, DNS passivo, varreduras da Censys, o banco de CVEs do NIST.</p>
     <p>O volume é o primeiro obstáculo. Um domínio grande como o shopify.com devolve de 2,5 mil a mais de 10 mil nomes, dependendo do dia da coleta, e quase todos são lojas inativas idênticas. Achar ali o <code>community-staging</code> com versão exposta ou o login fora da CDN é trabalho manual, lento e dependente da experiência de quem lê.</p>
     <p>LLMs leem rápido e sabem muito sobre vulnerabilidades. A pergunta é se o que eles dizem sobre esses dados é útil a quem faz o pentest, ou se só soa plausível.</p>
+    <h3 class="sub">Onde o ReconAI entra num pentest</h3>
+    <p>As fases seguem o PTES (Penetration Testing Execution Standard). O ReconAI cobre a parte passiva da coleta de informações e entrega a matéria-prima da modelagem de ameaças: hipóteses priorizadas, cada uma com o jeito de validar na fase ativa.</p>
   </div>
+
+  <figure class="organo" aria-label="Fases de um teste de intrusão e onde o ReconAI atua">
+    <div class="organo-raiz">Teste de intrusão autorizado</div>
+    <ol class="organo-fases">
+      <li><b>Pré-engajamento</b><span>escopo, autorização, regras de engajamento</span></li>
+      <li class="com-reconai"><b>Coleta de informações</b>
+        <ul class="organo-sub">
+          <li class="reconai"><b>Passiva: ReconAI</b><span>M1 coleta, M2 enriquece, M3 filtra</span></li>
+          <li><b>Ativa</b><span>varredura de portas, enumeração de serviços</span></li>
+        </ul>
+      </li>
+      <li class="com-reconai"><b>Modelagem de ameaças</b>
+        <ul class="organo-sub">
+          <li class="reconai"><b>ReconAI: M3</b><span>hipóteses de ataque priorizadas</span></li>
+        </ul>
+      </li>
+      <li><b>Análise de vulnerabilidades</b><span>confirmar as hipóteses (campo “validação”)</span></li>
+      <li><b>Exploração</b><span>explorar o que foi confirmado</span></li>
+      <li><b>Pós-exploração</b><span>alcance e impacto do acesso</span></li>
+      <li><b>Relatório</b><span>achados, risco e correção</span></li>
+    </ol>
+    <figcaption>Em destaque, o que o ReconAI automatiza. Tudo o que vem depois continua manual e só acontece com autorização.</figcaption>
+  </figure>
 </section>
 
 <!-- ============ PROBLEMA ============ -->
@@ -157,6 +183,35 @@
   </div>
 </section>
 
+<!-- ============ COLETA ============ -->
+<section id="coleta" class="secao">
+  <div class="coluna">
+    <h2>A coleta em detalhe</h2>
+    <p>O funil da abertura tem um filtro em cada etapa. Esta seção abre os dois extremos dele: de onde vêm os nomes e o que acontece com cada um dos 2.491 hosts.</p>
+
+    <h3 class="sub">De onde vêm os subdomínios</h3>
+    <p>O subfinder não varre nada. Ele pergunta a bases públicas que já registraram nomes do domínio e junta as respostas, sem repetir nomes. A versão instalada conhece 49 fontes, mas a maioria exige chave de acesso.</p>
+    <ol class="cascata" id="cascata-fontes"></ol>
+    <p>Abaixo, cada fonte que devolveu nomes para o shopify.com, e quantos desses nomes só ela viu.</p>
+    <div id="fontes-barras" class="barras-h"></div>
+    <h3 class="sub">O que o subfinder cruza</h3>
+    <p>Cada linha é uma combinação de fontes. Os pontos marcam quais fontes viram aqueles nomes, e a barra mostra quantos nomes caem nessa combinação.</p>
+    <div class="tabela-rolagem"><table class="upset" id="upset"></table></div>
+    <ul class="achados-curtos" id="fontes-achados"></ul>
+
+    <h3 class="sub">O mapa dos 2.491 hosts</h3>
+    <p>Cada quadrado é um host que resolve no DNS, na coleta de 12/10 usada no experimento. Os quadrados estão agrupados como no M1: hosts que respondem igual ficam juntos, do maior grupo para o menor. Passe o mouse para ver o grupo.</p>
+    <ul class="legenda-mapa" id="legenda-mapa"></ul>
+  </div>
+  <div class="mapa-wrap"><div id="mapa" class="mapa" role="img"></div></div>
+  <div class="coluna">
+    <p class="nota" id="mapa-dica">O bloco grande são as lojas desativadas com a mesma página “Store unavailable”, que o M1 transforma em um grupo só.</p>
+
+    <h3 class="sub">E os que ficaram pelo caminho</h3>
+    <div class="perdas" id="perdas"></div>
+  </div>
+</section>
+
 <!-- ============ CONFIANÇA ============ -->
 <section id="confianca" class="secao">
   <div class="coluna">
@@ -193,6 +248,71 @@
       <p class="nota">* Limite inferior: a única coleta com crédito no Censys (12/10) não registrou quais IPs foram consultados.</p>
     </details>
 
+    <h3 class="sub">A tabela basta para julgar uma fonte?</h3>
+    <p>Não totalmente. A régua acima tem três limites:</p>
+    <ul class="controles">
+      <li><b>É binária.</b> Um registro versionado (o NVD) e um registro assinado criptograficamente (o CT) valem o mesmo ponto, apesar de provarem coisas diferentes.</li>
+      <li><b>Julga a fonte, não o dado.</b> O subfinder recebe uma nota só, mas um nome visto em certificado é auditável e um nome que só o VirusTotal conhece não é.</li>
+      <li><b>É declarada, não medida.</b> Só o critério A do subfinder (2,9% de CT) vem de uma conta. O resto é julgamento.</li>
+    </ul>
+
+    <p><b>O que é ter verificabilidade alta.</b> Não é a fonte entregar muita informação: isso é rendimento. Também não basta ter acesso a tudo para chegar ao mesmo resultado, porque isso só garante a reprodução. Verificabilidade alta é quando <em>um terceiro independente, só com acesso público, chega ao mesmo dado e consegue provar que ele é autêntico e de quando é</em>. Baixa é quando ele precisa confiar na palavra da fonte.</p>
+
+    <h3 class="sub">Uma régua mais precisa</h3>
+    <p>A proposta troca o sim ou não por três níveis e acrescenta um quarto critério, a evidência que vem junto com cada dado. A soma vai de 0 a 8: até 2 é Baixa, de 3 a 5 é Média e de 6 a 8 é Alta.</p>
+  </div>
+  <div class="tabela-rolagem">
+    <table class="regua-tab">
+      <caption>Os quatro critérios e o que vale cada nível.</caption>
+      <thead><tr><th scope="col">Critério</th><th scope="col">0</th><th scope="col">1</th><th scope="col">2</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">R · Reprodução<small>outra pessoa obtém o mesmo dado?</small></th><td>Não: foi uma foto do passado, guardada por uma empresa</td><td>Sim, agora, mas o valor muda e não há histórico</td><td>Sim, inclusive o valor de uma data passada (histórico público)</td></tr>
+        <tr><th scope="row">A · Autenticidade<small>existe prova de que não foi alterado?</small></th><td>Nenhum registro</td><td>Registro público versionado, sem assinatura</td><td>Registro assinado e só de acréscimo, com prova criptográfica</td></tr>
+        <tr><th scope="row">O · Abertura<small>dá para saber como o dado nasceu?</small></th><td>Método e dados fechados</td><td>Só um dos dois é aberto</td><td>Método e dados abertos</td></tr>
+        <tr><th scope="row">E · Evidência<small>o que vem junto com cada dado?</small></th><td>Só um número ou rótulo</td><td>O dado com fonte e data</td><td>O artefato bruto (o certificado, a resposta HTTP, o registro do CVE)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tabela-rolagem">
+    <table class="scorecard nova-regua">
+      <caption>As fontes na régua nova. É uma proposta para discussão: os níveis ainda são atribuídos, mas cada um tem definição fixa. O CT entra como referência do que é nota máxima.</caption>
+      <thead><tr><th scope="col">Fonte</th><th scope="col">R</th><th scope="col">A</th><th scope="col">O</th><th scope="col">E</th><th scope="col">Total</th><th scope="col">Antes (0–3)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" data-natureza="herdado">CT (crt.sh)</th><td>2</td><td>2</td><td>2</td><td>2</td><td data-nivel="alta">8 Alta</td><td>—</td></tr>
+        <tr><th scope="row" data-natureza="herdado">NVD</th><td>2</td><td>1</td><td>2</td><td>2</td><td data-nivel="alta">7 Alta</td><td>3 Alta</td></tr>
+        <tr><th scope="row" data-natureza="primeira">httpx</th><td>1</td><td>0</td><td>2</td><td>2</td><td data-nivel="media">5 Média</td><td>2 Média</td></tr>
+        <tr><th scope="row" data-natureza="vivo">dnsx</th><td>1</td><td>0</td><td>2</td><td>1</td><td data-nivel="media">4 Média</td><td>2 Média</td></tr>
+        <tr><th scope="row" data-natureza="herdado">EPSS</th><td>2</td><td>1</td><td>1</td><td>0</td><td data-nivel="media">4 Média</td><td>1 Baixa</td></tr>
+        <tr><th scope="row" data-natureza="herdado">subfinder</th><td>1</td><td>0</td><td>0</td><td>1</td><td data-nivel="baixa">2 Baixa</td><td>1 Baixa</td></tr>
+        <tr><th scope="row" data-natureza="herdado">Censys</th><td>0</td><td>0</td><td>0</td><td>1</td><td data-nivel="baixa">1 Baixa</td><td>0 Baixa</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="coluna">
+    <details class="regua">
+      <summary>Por que cada fonte recebeu essa nota</summary>
+      <dl>
+        <dt>CT (crt.sh)</dt><dd>Qualquer um consulta o log hoje e vê a data de emissão (R2). O log é assinado em árvore de Merkle e só aceita acréscimos (A2). O padrão e os dados são públicos (O2). Vem o próprio certificado (E2).</dd>
+        <dt>NVD</dt><dd>A API devolve o registro e o histórico de alterações de cada CVE (R2). O registro é versionado, mas não assinado (A1). Dados abertos do NIST (O2). Vem o registro completo, com referências (E2).</dd>
+        <dt>httpx</dt><dd>Uma nova requisição reproduz, mas o site muda e não existe histórico (R1). A resposta HTTP não é assinada (A0). A ferramenta e as assinaturas de tecnologia são abertas (O2). Dá para guardar a resposta bruta (E2).</dd>
+        <dt>dnsx</dt><dd>Qualquer resolvedor responde, mas o registro pode mudar (R1). Sem DNSSEC na maioria das zonas (A0). Protocolo aberto (O2). Vem o registro A ou CNAME (E1).</dd>
+        <dt>EPSS</dt><dd>O FIRST publica os scores de cada dia (R2), em arquivos datados mas não assinados (A1). O método está publicado, mas os dados de treino são fechados (O1). Vem só a probabilidade, sem explicação por CVE (E0).</dd>
+        <dt>subfinder</dt><dd>Dá para reenumerar, mas o resultado muda: 2.491 nomes em 12/10 e 10.577 em 03/11 (R1). Só 2,9% vêm de CT (A0). 89% vêm do VirusTotal, que é fechado (O0). Vem o nome e a fonte (E1).</dd>
+        <dt>Censys</dt><dd>A varredura aconteceu no passado, nos servidores da empresa, e ninguém a refaz (R0). Banco proprietário (A0) e método fechado (O0). Vem o serviço e o software por porta (E1).</dd>
+      </dl>
+    </details>
+
+    <h3 class="sub">Medir em vez de declarar</h3>
+    <p>A régua ainda é atribuída. O passo seguinte é medir quanto de cada fonte um segundo canal independente confirma:</p>
+    <ul class="controles">
+      <li><b>Corroboração entre fontes do subfinder:</b> só 4,2% dos nomes aparecem em duas ou mais fontes. <span class="medido">medido</span></li>
+      <li><b>Independência das fontes:</b> todos os 50 nomes da HackerTarget também estão no DNSDumpster, que é um projeto da mesma empresa. A concordância entre as duas não conta como confirmação. <span class="medido">medido</span></li>
+      <li><b>Censys confirmada pelo httpx:</b> concordância de 0,855 (Jaccard) nos 19 IPs comparáveis. <span class="medido">medido</span></li>
+      <li><b>Estabilidade do httpx:</b> repetir as mesmas requisições depois de alguns dias e medir quantas respostas continuam iguais. <span class="proposto">proposto</span></li>
+      <li><b>Casamento de CPE no NVD:</b> conferir à mão uma amostra de software → CPE e medir a taxa de acerto. <span class="proposto">proposto</span></li>
+    </ul>
+    <p>E a verificabilidade deve viajar com o dado, não só com a fonte. Assim como cada software já leva a etiqueta “corroborado”, “primeira mão” ou “herdado”, cada nome pode levar “visto em CT” ou “só DNS passivo”.</p>
+
     <h3 class="sub">O que a medição revelou</h3>
     <ul class="achados">
       <li><span class="valor">2,9%</span><p>dos 10.610 subdomínios vieram de Certificate Transparency, a fonte mais auditável. 89% vieram do VirusTotal, que não é auditável. A nota “Alta” da rodada anterior presumia CT.</p></li>
@@ -213,6 +333,42 @@
   <div class="coluna">
     <h2>O experimento</h2>
     <p>Quatro alvos, dois modelos abertos rodando localmente, duas técnicas de prompt e 20 execuções de cada combinação, para medir também a variabilidade do modelo. Os dois prompts são o <strong>few-shot</strong> (dois exemplos resolvidos antes do contexto) e o <strong>chain-of-thought</strong> (raciocínio explícito antes da resposta). Cada ponto abaixo é uma execução.</p>
+  </div>
+
+  <div class="coluna">
+    <h3 class="sub">Os modelos</h3>
+  </div>
+  <div class="tabela-rolagem">
+    <table class="scorecard modelos">
+      <caption>Os dois modelos do experimento rodam localmente pelo Ollama, numa CPU de 16 núcleos sem GPU. Os dois Claude ficaram fora da matriz.</caption>
+      <thead><tr><th scope="col">Modelo</th><th scope="col">Fabricante e licença</th><th scope="col">Tamanho</th><th scope="col">Janela nativa</th><th scope="col">Janela usada</th><th scope="col">Situação</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" data-modelo="llama">Llama 3.1 8B</th><td>Meta, licença Llama 3.1 Community</td><td>8,0 bi parâmetros, 4 bits (Q4_K_M), 4,9 GB</td><td>128 mil tokens</td><td>8.192</td><td>160 execuções</td></tr>
+        <tr><th scope="row" data-modelo="qwen">Qwen 2.5 7B</th><td>Alibaba, Apache-2.0</td><td>7,6 bi parâmetros, 4 bits (Q4_K_M), 4,7 GB</td><td>32 mil tokens</td><td>8.192</td><td>160 execuções</td></tr>
+        <tr><th scope="row">Claude Sonnet 5.5</th><td>Anthropic, proprietário, US$ 2 / 10 por milhão</td><td>não divulgado, via API</td><td>1 milhão</td><td>—</td><td>Recusou no teste de fumaça (categoria cyber)</td></tr>
+        <tr><th scope="row">Claude Sonnet 4.6</th><td>Anthropic, proprietário, US$ 3 / 15 por milhão</td><td>não divulgado, via API</td><td>1 milhão</td><td>—</td><td>Não rodou: erro de configuração no código</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="coluna">
+    <h3 class="sub">Os limites e por que existem</h3>
+    <p>A janela de 8.192 tokens não é um limite dos modelos: o Llama aceita 128 mil e o Qwen 32 mil. É uma escolha, e o orçamento de 3.500 tokens do contexto deriva dela.</p>
+  </div>
+  <div class="tabela-rolagem">
+    <table class="scorecard limites">
+      <thead><tr><th scope="col">Limite</th><th scope="col">Valor</th><th scope="col">Por quê</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Janela do modelo local</th><td>8.192 tokens</td><td>O padrão do Ollama é menor e cortaria o shopify sem avisar. Uma janela maior ocupa mais memória e deixa a CPU mais lenta. 8.192 cobre o pior caso medido, 6.840 tokens de entrada mais saída, com folga.</td></tr>
+        <tr><th scope="row">Contexto enviado ao modelo</th><td>3.500 tokens</td><td>Precisa caber na janela junto com as instruções, os dois exemplos do few-shot e a resposta. Sem o filtro, só o JSON do shopify tem 11,6 mil tokens. Nasceu quando o Llama rodava na Groq, cujo plano gratuito limitava cerca de 6.000 tokens por minuto. Modelos pequenos também usam pior as entradas longas: tendem a ignorar o que está no meio (Liu et al., 2023, “Lost in the Middle”). E cada token entra 80 vezes por alvo.</td></tr>
+        <tr><th scope="row">Grupos no contexto</th><td>por nota, até encher</td><td>No shopify entraram 52 de 76. O 52º e o 53º têm a mesma nota: quem decide o corte é o espaço.</td></tr>
+        <tr><th scope="row">Nomes de exemplo por grupo</th><td>8 no M1, 4 no contexto</td><td>Mostram como é o grupo sem repetir milhares de nomes iguais.</td></tr>
+        <tr><th scope="row">CVEs por software</th><td>5</td><td>Os de maior CVSS × EPSS. Evita que um software com dezenas de CVEs ocupe o contexto todo.</td></tr>
+        <tr><th scope="row">Hipóteses pedidas</th><td>de 3 a 10</td><td>Força o modelo a priorizar. 17,5% das execuções saíram da faixa.</td></tr>
+        <tr><th scope="row">Saída máxima</th><td>4.000 tokens (Claude)</td><td>A maior resposta medida teve 2.473 tokens (Qwen, CoT, shopify).</td></tr>
+        <tr><th scope="row">Execuções por combinação</th><td>20</td><td>Pedido da Rodada 3: duas execuções não medem variação.</td></tr>
+        <tr><th scope="row">Consultas à Censys</th><td>1 crédito por IP</td><td>Os créditos gratuitos acabaram em 12/10. Por isso o experimento usa essa coleta.</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="grade-wrap">
@@ -247,6 +403,17 @@
       <div id="resultados-alvo"></div>
     </details>
     <p class="nota" id="resultados-nota"></p>
+
+    <h3 class="sub">As quatro técnicas lado a lado</h3>
+    <p>Cada painel é uma métrica, com uma barra por combinação de modelo e prompt. A cor indica o modelo, e as barras listradas são chain-of-thought. Os eixos não se comparam entre painéis: cada um tem sua própria escala.</p>
+    <ul class="legenda-modelos" aria-hidden="true"><li data-modelo="llama">Llama 3.1 8B</li><li data-modelo="qwen">Qwen 2.5 7B</li></ul>
+  </div>
+  <div id="comparativo" class="comparativo"></div>
+  <div class="coluna">
+    <h3 class="sub">Quanto custou e quanto custaria</h3>
+    <p id="custo-intro"></p>
+    <div id="custo"></div>
+    <p class="nota">Preços de 12/11/2026. Claude: tabela oficial da Anthropic. Llama e Qwen hospedados: mediana do OpenRouter, onde os provedores variam de cerca de US$ 0,02 a 0,20 por milhão. O Claude conta mais tokens para o mesmo texto: no teste de fumaça, a entrada saiu 1,9 vez maior no few-shot e 2,5 vezes no CoT, e a estimativa aplica esse fator. A saída foi mantida como medida nos modelos abertos.</p>
   </div>
 </section>
 
@@ -282,10 +449,15 @@
       <p class="pedido">Transformar a confiança em número, enxugar o contexto, recoletar o alvo que caiu, rodar o M3.</p>
       <p>Scorecard medido, com oito notas revistas. Filtro de contexto: shopify de 11,6 mil para 3,5 mil tokens. Chave do NVD (consultas 8× mais rápidas). Teste de fumaça: o Sonnet recusou e a Groq deixou de servir Llama, que passou a rodar local.</p>
     </li>
-    <li class="agora">
+    <li>
       <h3>Rodada 6 <time datetime="2026-11-10">10/11</time></h3>
       <p class="pedido">Decidir o braço Claude, escolher um segundo modelo aberto, rodar o experimento, montar o baseline humano.</p>
       <p>A recusa do Sonnet é mantida como resultado. Qwen 2.5 7B entra como segundo modelo, o que dobrou a matriz de 160 para 320 execuções. As 320 rodaram em ~3,8 h de CPU, sem nenhum erro de formato. M4 com avaliação cega unificada e cronometrada, pronto para receber o baseline humano.</p>
+    </li>
+    <li class="agora">
+      <h3>Rodada 7 <time datetime="2026-11-12">12/11</time></h3>
+      <p class="pedido">Desenhar as fases de um pentest, as fontes que o subfinder cruza e o mapa dos hosts. Declarar os modelos e o porquê de cada limite. Julgar a verificabilidade com mais precisão. Comparar as técnicas e estimar o custo em tokens e dólares.</p>
+      <p>Organograma do pentest pelo PTES. Recoleta do subfinder com a fonte de cada nome: só 4,2% aparecem em duas fontes ou mais. Mapa dos 2.491 hosts e dos que não responderam. Tabela de modelos e de limites. Régua de verificabilidade de 0 a 8, com quatro critérios e níveis definidos. Painéis comparando as quatro técnicas. Custo das 320 execuções em cada opção.</p>
     </li>
   </ol>
 </section>
@@ -342,6 +514,7 @@
   <span class="dica">← → para navegar, P ou Esc para sair</span>
 </div>
 
+<script src="data/coleta.js"></script>
 <script src="data/experimento.js"></script>
 <script src="assets/app.js"></script>
 </body>

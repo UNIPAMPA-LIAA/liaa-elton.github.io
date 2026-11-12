@@ -45,14 +45,13 @@
 
   <figure class="funil" aria-labelledby="funil-legenda">
     <ol>
-      <li style="--v:10577" data-natureza="herdado"><span class="n">10.577</span><span class="r">subdomínios encontrados pelo subfinder</span></li>
-      <li style="--v:9391" data-natureza="vivo"><span class="n">9.391</span><span class="r">ainda resolvem no DNS (dnsx)</span></li>
-      <li style="--v:9343" data-natureza="primeira"><span class="n">9.343</span><span class="r">responderam HTTP (httpx)</span></li>
-      <li style="--v:76" data-natureza="neutro"><span class="n">76</span><span class="r">grupos com a mesma assinatura HTTP</span></li>
-      <li style="--v:52" data-natureza="neutro"><span class="n">52</span><span class="r">grupos que cabem no contexto do LLM (3,5 mil tokens)</span></li>
-      <li style="--v:8" data-natureza="llm"><span class="n">≈ 8</span><span class="r">hipóteses priorizadas por execução (média de 80 execuções)</span></li>
+      <li data-natureza="vivo"><span class="n">2.491</span><span class="r">subdomínios encontrados pelo subfinder que resolvem no DNS (dnsx)</span></li>
+      <li data-natureza="primeira"><span class="n">2.448</span><span class="r">responderam HTTP (httpx)</span></li>
+      <li data-natureza="neutro"><span class="n">76</span><span class="r">grupos de sites que respondem igual (mesmo status, título, tecnologia e servidor)</span></li>
+      <li data-natureza="neutro"><span class="n">52</span><span class="r">grupos mais interessantes para um atacante que cabem em 3,5 mil tokens</span></li>
+      <li data-natureza="llm"><span class="n">≈ 8</span><span class="r">hipóteses priorizadas por execução (média de 80 execuções)</span></li>
     </ol>
-    <figcaption id="funil-legenda">shopify.com, coleta de 03/11/2026. Largura das barras em escala logarítmica.</figcaption>
+    <figcaption id="funil-legenda">shopify.com, coleta de 12/10/2026, a usada no experimento. Uma recoleta em 03/11 encontrou 10.577 nomes, quatro vezes mais: o tamanho da superfície depende do que as fontes passivas devolvem no dia. Largura das barras em escala logarítmica.</figcaption>
   </figure>
 </section>
 
@@ -61,7 +60,7 @@
   <div class="coluna">
     <h2>Contexto</h2>
     <p>Todo teste de intrusão autorizado começa pelo reconhecimento. Antes de enviar qualquer carga ao alvo, o analista precisa saber o que existe: quais subdomínios, quais servidores, que software e em que versão. Quanto menos o reconhecimento toca o alvo, menor o risco de derrubar um serviço ou disparar alarmes, e por isso a primeira fase costuma ser <em>passiva</em>. Ela consulta bases públicas que outros já coletaram: logs de Certificate Transparency, DNS passivo, varreduras da Censys, o banco de CVEs do NIST.</p>
-    <p>O volume é o primeiro obstáculo. Um domínio grande como o shopify.com devolve mais de dez mil nomes, e quase todos são lojas inativas idênticas. Achar ali o <code>community-staging</code> com versão exposta ou o login fora da CDN é trabalho manual, lento e dependente da experiência de quem lê.</p>
+    <p>O volume é o primeiro obstáculo. Um domínio grande como o shopify.com devolve de 2,5 mil a mais de 10 mil nomes, dependendo do dia da coleta, e quase todos são lojas inativas idênticas. Achar ali o <code>community-staging</code> com versão exposta ou o login fora da CDN é trabalho manual, lento e dependente da experiência de quem lê.</p>
     <p>LLMs leem rápido e sabem muito sobre vulnerabilidades. A pergunta é se o que eles dizem sobre esses dados é útil a quem faz o pentest, ou se só soa plausível.</p>
   </div>
 </section>

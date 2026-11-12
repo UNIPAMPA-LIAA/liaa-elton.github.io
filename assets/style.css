@@ -116,8 +116,8 @@ h3.sub { font-size: 1.35rem; font-weight: 600; margin: 2.2em 0 .6em; }
 .funil { max-width: 980px; margin: 64px auto 0; }
 .funil ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .funil li {
-  /* largura em escala log: log10(v)/log10(10577) */
-  --w: calc(var(--l) / 4.0244 * 100%);
+  /* largura em escala log: log10(v)/log10(2491) */
+  --w: calc(var(--l) / 3.3964 * 100%);
   display: grid; grid-template-columns: minmax(0, 1fr); position: relative;
   padding: 12px 16px; min-height: 52px;
   font-family: var(--f-display);
@@ -131,12 +131,11 @@ h3.sub { font-size: 1.35rem; font-weight: 600; margin: 2.2em 0 .6em; }
 .funil li > * { position: relative; }
 .funil .n { font-size: clamp(1.4rem, 3.2vw, 2rem); font-weight: 800; letter-spacing: -.02em; line-height: 1; color: var(--cor); }
 .funil .r { font-size: .95rem; color: var(--tinta-2); margin-top: 4px; }
-.funil li:nth-child(1) { --l: 4.0244; --i: 0; }
-.funil li:nth-child(2) { --l: 3.9727; --i: 1; }
-.funil li:nth-child(3) { --l: 3.9705; --i: 2; }
-.funil li:nth-child(4) { --l: 1.8808; --i: 3; }
-.funil li:nth-child(5) { --l: 1.7160; --i: 4; }
-.funil li:nth-child(6) { --l: 0.9232; --i: 5; }
+.funil li:nth-child(1) { --l: 3.3964; --i: 0; }
+.funil li:nth-child(2) { --l: 3.3888; --i: 1; }
+.funil li:nth-child(3) { --l: 1.8808; --i: 2; }
+.funil li:nth-child(4) { --l: 1.7160; --i: 3; }
+.funil li:nth-child(5) { --l: 0.9232; --i: 4; }
 .funil figcaption { font-size: .85rem; color: var(--tinta-2); margin-top: 14px; font-family: var(--f-display); }
 @keyframes crescer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .funil li::before { animation: none; } }

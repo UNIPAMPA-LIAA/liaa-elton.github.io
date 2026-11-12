@@ -162,7 +162,7 @@
 <section id="confianca" class="secao">
   <div class="coluna">
     <h2>Quanto vale cada fonte</h2>
-    <p>Na quarta rodada o professor pediu para medir a confiança das fontes. A primeira resposta foi um quadro com notas dadas por julgamento. Na rodada seguinte cada eixo ganhou uma conta e um limiar fixo, calculados pelo <code>m_confianca.py</code> sobre os JSONs dos cinco alvos. Sete notas mudaram quando passaram a ser medidas, e cinco delas para pior.</p>
+    <p>Na quarta rodada o professor pediu para medir a confiança das fontes. A primeira resposta foi um quadro com notas dadas por julgamento. Na rodada seguinte cada eixo ganhou uma conta e um limiar fixo, calculados pelo <code>m_confianca.py</code> sobre os JSONs dos cinco alvos. Oito notas mudaram quando passaram a ser medidas: sete caíram, e só o rendimento do httpx subiu.</p>
   </div>
 
   <div class="tabela-rolagem">
@@ -175,7 +175,7 @@
         <tr><th scope="row" data-natureza="herdado">subfinder</th><td data-nivel="alta">Alta <small>88,5%</small></td><td data-nivel="nd">n/d</td><td data-nivel="baixa">Baixa <small>1/3 (era Alta)</small></td><td>Herdado</td></tr>
         <tr><th scope="row" data-natureza="vivo">dnsx</th><td data-nivel="nd">n/d</td><td data-nivel="alta">Alta <small>0 d</small></td><td data-nivel="media">Média <small>2/3 (era Alta)</small></td><td>Infra ao vivo</td></tr>
         <tr><th scope="row" data-natureza="primeira">httpx</th><td data-nivel="alta">Alta <small>99,5% (era Média)</small></td><td data-nivel="alta">Alta <small>0 d</small></td><td data-nivel="media">Média <small>2/3 (era Alta)</small></td><td>Primeira mão</td></tr>
-        <tr><th scope="row" data-natureza="herdado">Censys</th><td data-nivel="baixa">Baixa <small>23,2%*</small></td><td data-nivel="nd">n/d</td><td data-nivel="baixa">Baixa <small>0/3 (era Média)</small></td><td>Herdado</td></tr>
+        <tr><th scope="row" data-natureza="herdado">Censys</th><td data-nivel="baixa">Baixa <small>23,2%* (era Média)</small></td><td data-nivel="nd">n/d</td><td data-nivel="baixa">Baixa <small>0/3 (era Média)</small></td><td>Herdado</td></tr>
         <tr><th scope="row" data-natureza="herdado">NVD</th><td data-nivel="media">Média <small>75% (era Alta)</small></td><td data-nivel="nd">n/d</td><td data-nivel="alta">Alta <small>3/3</small></td><td>Correlação</td></tr>
         <tr><th scope="row" data-natureza="herdado">EPSS</th><td data-nivel="alta">Alta <small>100%</small></td><td data-nivel="alta">Alta <small>1 d</small></td><td data-nivel="baixa">Baixa <small>1/3 (era Média)</small></td><td>Modelo</td></tr>
       </tbody>
@@ -241,6 +241,7 @@
       <li><b>CoT gera mais hipóteses e varia mais.</b> No mesmo alvo, o desvio entre as 20 execuções fica em torno de 0,6 hipótese no few-shot e 1,9 no CoT, nos dois modelos. O CoT também leva o dobro do tempo.</li>
       <li><b>O tamanho do alvo explica o segundo pico.</b> No shopify os modelos geram de 4,5 a 10 hipóteses por execução, contra 2 a 6 nos alvos pequenos. Por isso o desvio da tabela, que junta os quatro alvos, parece maior que a variação real do modelo.</li>
       <li><b>Zero erros de formato e zero recusas</b> nas 320 execuções dos modelos abertos, contra recusa total do Sonnet.</li>
+      <li><b>Formato válido não é instrução cumprida.</b> O prompt pede de 3 a 10 hipóteses, e 56 das 320 execuções (17,5%) saíram fora dessa faixa. O JSON Schema garante a estrutura, não a obediência.</li>
     </ul>
     <details class="regua" id="por-alvo">
       <summary>Detalhe por alvo</summary>
@@ -280,7 +281,7 @@
     <li>
       <h3>Rodada 5 <time datetime="2026-11-03">03/11</time></h3>
       <p class="pedido">Transformar a confiança em número, enxugar o contexto, recoletar o alvo que caiu, rodar o M3.</p>
-      <p>Scorecard medido, com sete notas revistas. Filtro de contexto: shopify de 11,6 mil para 3,5 mil tokens. Chave do NVD (consultas 8× mais rápidas). Teste de fumaça: o Sonnet recusou e a Groq deixou de servir Llama, que passou a rodar local.</p>
+      <p>Scorecard medido, com oito notas revistas. Filtro de contexto: shopify de 11,6 mil para 3,5 mil tokens. Chave do NVD (consultas 8× mais rápidas). Teste de fumaça: o Sonnet recusou e a Groq deixou de servir Llama, que passou a rodar local.</p>
     </li>
     <li class="agora">
       <h3>Rodada 6 <time datetime="2026-11-10">10/11</time></h3>

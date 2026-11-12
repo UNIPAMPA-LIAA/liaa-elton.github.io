@@ -50,7 +50,7 @@
       <li style="--v:9343" data-natureza="primeira"><span class="n">9.343</span><span class="r">responderam HTTP (httpx)</span></li>
       <li style="--v:76" data-natureza="neutro"><span class="n">76</span><span class="r">grupos com a mesma assinatura HTTP</span></li>
       <li style="--v:52" data-natureza="neutro"><span class="n">52</span><span class="r">grupos que cabem no contexto do LLM (3,5 mil tokens)</span></li>
-      <li style="--v:3" data-natureza="llm"><span class="n">≈ 3</span><span class="r">hipóteses priorizadas por execução</span></li>
+      <li style="--v:8" data-natureza="llm"><span class="n">≈ 8</span><span class="r">hipóteses priorizadas por execução (média de 80 execuções)</span></li>
     </ol>
     <figcaption id="funil-legenda">shopify.com, coleta de 03/11/2026. Largura das barras em escala logarítmica.</figcaption>
   </figure>
@@ -234,8 +234,18 @@
     <h3 class="sub">Alvos</h3>
     <p><b>testasp</b> e <b>testaspnet</b> (vulnweb) e o <b>OWASP Juice Shop</b> são aplicações vulneráveis de propósito, mantidas para teste, e incluem stacks antigas para exercitar o M2. O <b>shopify.com</b> entra pela escala: nele só se faz coleta passiva e a sondagem HTTP padrão do httpx. Um quinto alvo, o testphp, saiu do ar durante o semestre e ficou registrado como indisponível.</p>
 
-    <h3 class="sub">Resultados parciais</h3>
+    <h3 class="sub">Resultados: volume e estabilidade</h3>
     <div id="resultados"></div>
+    <ul class="leitura">
+      <li><b>O prompt pesa mais que o modelo.</b> Passar de few-shot para chain-of-thought muda mais o resultado do que trocar Llama por Qwen.</li>
+      <li><b>CoT gera mais hipóteses e varia mais.</b> No mesmo alvo, o desvio entre as 20 execuções fica em torno de 0,6 hipótese no few-shot e 1,9 no CoT, nos dois modelos. O CoT também leva o dobro do tempo.</li>
+      <li><b>O tamanho do alvo explica o segundo pico.</b> No shopify os modelos geram de 4,5 a 10 hipóteses por execução, contra 2 a 6 nos alvos pequenos. Por isso o desvio da tabela, que junta os quatro alvos, parece maior que a variação real do modelo.</li>
+      <li><b>Zero erros de formato e zero recusas</b> nas 320 execuções dos modelos abertos, contra recusa total do Sonnet.</li>
+    </ul>
+    <details class="regua" id="por-alvo">
+      <summary>Detalhe por alvo</summary>
+      <div id="resultados-alvo"></div>
+    </details>
     <p class="nota" id="resultados-nota"></p>
   </div>
 </section>
@@ -275,7 +285,7 @@
     <li class="agora">
       <h3>Rodada 6 <time datetime="2026-11-10">10/11</time></h3>
       <p class="pedido">Decidir o braço Claude, escolher um segundo modelo aberto, rodar o experimento, montar o baseline humano.</p>
-      <p>A recusa do Sonnet é mantida como resultado. Qwen 2.5 7B entra como segundo modelo. M4 com avaliação cega unificada e cronometrada. Experimento de 320 execuções em andamento.</p>
+      <p>A recusa do Sonnet é mantida como resultado. Qwen 2.5 7B entra como segundo modelo, o que dobrou a matriz de 160 para 320 execuções. As 320 rodaram em ~3,8 h de CPU, sem nenhum erro de formato. M4 com avaliação cega unificada e cronometrada, pronto para receber o baseline humano.</p>
     </li>
   </ol>
 </section>
@@ -296,6 +306,8 @@
       <dd>O modo com pensamento desligado do 5.5 não existe no 4.6, e a API devolveu erro 400. Foi um erro no código, e esse braço não chegou a rodar.</dd>
       <dt>O coletor perdia dados no timeout</dt>
       <dd>Quando uma ferramenta estourava o tempo, tudo o que ela já tinha coletado era descartado. Agora a saída parcial é mantida e o corte fica registrado em <code>meta.stats.timeout</code>.</dd>
+      <dt>Timeouts no chain-of-thought</dt>
+      <dd>Seis execuções com CoT estouraram o tempo do Ollama, porque o raciocínio explícito gera respostas longas (até 14 hipóteses numa só). Foram refeitas com <code>--inicio N</code>, sem repetir as outras 314.</dd>
       <dt>O NVD atrasa</dt>
       <dd>A versão 2026.10.0 do Discourse que aparece no shopify ainda não existe no NVD. Software recente fica sem CVE mesmo quando tem versão.</dd>
     </dl>
@@ -307,7 +319,6 @@
   <div class="coluna">
     <h2>Próximos passos</h2>
     <ol class="passos">
-      <li><b>Concluir as 320 execuções</b> com Llama e Qwen nos quatro alvos (~3,5 h de CPU, retomável).</li>
       <li><b>Coletar o baseline humano.</b> O analista lê os mesmos contextos e escreve suas hipóteses, com o tempo cronometrado.</li>
       <li><b>Avaliar às cegas</b> o conjunto embaralhado de hipóteses dos modelos e do humano.</li>
       <li><b>Calcular a métrica final:</b> % de hipóteses válidas por fonte, tempo de produção humano contra a latência do LLM, e variabilidade entre execuções.</li>

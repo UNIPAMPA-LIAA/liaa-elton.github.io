@@ -66,6 +66,30 @@
       return;
     }
     const maxHip = Math.max(...feitas.flatMap((c) => c.resumo.hip_por_run));
+    const media = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+    const dp = (xs) => { const m = media(xs); return Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / (xs.length - 1 || 1)); };
+
+    /* agregado por modelo × prompt (todos os alvos juntos) */
+    let ag = '<div class="res-wrap"><table class="res-tabela"><thead><tr>' +
+      '<th scope="col">Modelo e prompt</th><th scope="col">Execuções</th><th scope="col">Hipóteses por execução</th>' +
+      '<th scope="col">Distribuição (1 a ' + maxHip + ' hipóteses)</th><th scope="col">Latência média</th></tr></thead><tbody>';
+    Object.keys(D.modelos).forEach((m) => Object.keys(D.prompts).forEach((p) => {
+      const cs = feitas.filter((c) => c.modelo === m && c.prompt === p);
+      if (!cs.length) return;
+      const hs = cs.flatMap((c) => c.resumo.hip_por_run);
+      const n = hs.length;
+      const lat = cs.reduce((a, c) => a + c.resumo.lat_med * c.resumo.n, 0) / n;
+      const cont = Array.from({ length: maxHip }, (_, i) => hs.filter((v) => v === i + 1).length);
+      const pico = Math.max(...cont);
+      const hist = cont.map((k, i) => `<i style="height:${k ? Math.max(6, (100 * k) / pico) : 0}%" title="${i + 1} hipóteses: ${k} execuções"></i>`).join("");
+      ag += `<tr><td><b>${esc(D.modelos[m])}</b><br>${esc(D.prompts[p])}</td>` +
+        `<td class="num">${n}</td>` +
+        `<td class="num">${fmt(media(hs), 2)} <small>desvio ${fmt(dp(hs), 2)}, de ${Math.min(...hs)} a ${Math.max(...hs)}</small></td>` +
+        `<td><div class="tira hist" style="--cor:var(--${m === "qwen" ? "vivo" : "llm"})" role="img" aria-label="Execuções por número de hipóteses: ${cont.join(", ")}">${hist}</div></td>` +
+        `<td class="num">${fmt(lat)} s</td></tr>`;
+    }));
+    r.innerHTML = ag + "</tbody></table></div>";
+
     let h = '<div class="res-wrap"><table class="res-tabela"><thead><tr>' +
       '<th scope="col">Alvo e combinação</th><th scope="col">Execuções</th><th scope="col">Latência média</th>' +
       '<th scope="col">Hipóteses por execução</th><th scope="col">Variação entre execuções</th></tr></thead><tbody>';
@@ -79,7 +103,7 @@
         `<td><div class="tira" data-modelo="${c.modelo}" style="--cor:var(--${c.modelo === "qwen" ? "vivo" : "llm"})" role="img" aria-label="Hipóteses por execução: ${s.hip_por_run.join(", ")}">${tira}</div></td></tr>`;
     });
     h += "</tbody></table></div>";
-    r.innerHTML = h;
+    $("#resultados-alvo").innerHTML = h;
 
     const julgados = (D.avaliacao_cega || []).reduce((a, x) => a + x.julgados, 0);
     const nota = [

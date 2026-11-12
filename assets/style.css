@@ -136,7 +136,7 @@ h3.sub { font-size: 1.35rem; font-weight: 600; margin: 2.2em 0 .6em; }
 .funil li:nth-child(3) { --l: 3.9705; --i: 2; }
 .funil li:nth-child(4) { --l: 1.8808; --i: 3; }
 .funil li:nth-child(5) { --l: 1.7160; --i: 4; }
-.funil li:nth-child(6) { --l: 0.4771; --i: 5; }
+.funil li:nth-child(6) { --l: 0.9232; --i: 5; }
 .funil figcaption { font-size: .85rem; color: var(--tinta-2); margin-top: 14px; font-family: var(--f-display); }
 @keyframes crescer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .funil li::before { animation: none; } }
@@ -264,6 +264,11 @@ h3.sub { font-size: 1.35rem; font-weight: 600; margin: 2.2em 0 .6em; }
 .tira { display: flex; align-items: flex-end; gap: 2px; height: 34px; }
 .tira i { width: 5px; background: var(--cor, var(--llm)); border-radius: 1px; min-height: 2px; }
 .res-wrap { overflow-x: auto; }
+.tira.hist { gap: 3px; height: 40px; border-bottom: 1px solid var(--regua); }
+.tira.hist i { width: 9px; }
+#por-alvo .res-wrap { margin-bottom: 12px; }
+.leitura { padding-left: 1.2em; margin-top: 24px; }
+.leitura li { margin-bottom: .5em; }
 .res-vazio { padding: 18px 20px; border: 1px dashed var(--regua); border-radius: 6px; color: var(--tinta-2); }
 
 /* ---------- linha do tempo ---------- */

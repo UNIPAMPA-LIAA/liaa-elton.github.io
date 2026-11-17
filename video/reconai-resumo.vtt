@@ -88,144 +88,133 @@ O
 VirusTotal, do Google, o crt.sh,
 
 21
-00:00:54.130 --> 00:00:55.470
+00:00:54.130 --> 00:00:55.433
 nos Estados Unidos,
 
 22
-00:00:55.930 --> 00:00:57.210
-e a HackerTarget,
+00:00:55.500 --> 00:00:58.090
+e a HackerTarget, na Austrália.
 
 23
-00:00:58.710 --> 00:00:59.503
-na Austrália.
+00:00:58.380 --> 00:01:01.980
+Só 4% dos nomes aparecem em duas fontes.
 
 24
-00:00:59.570 --> 00:01:00.460
-Só
-
-25
-00:01:00.740 --> 00:01:03.930
-4% dos nomes aparecem em duas fontes.
-
-26
-00:01:04.000 --> 00:01:05.550
+00:01:02.050 --> 00:01:03.600
 Os 2.491
 
-27
-00:01:06.020 --> 00:01:09.353
+25
+00:01:04.070 --> 00:01:07.473
 hosts do experimento apontam para 78 IPs,
 
-28
-00:01:09.420 --> 00:01:11.500
-todos de empresas
+26
+00:01:07.540 --> 00:01:10.733
+todos de empresas de nuvem, CDN e e-mail.
 
-29
-00:01:13.040 --> 00:01:15.583
-de nuvem, CDN e e-mail.
-
-30
-00:01:15.650 --> 00:01:19.140
+27
+00:01:10.800 --> 00:01:14.290
 Os 43 que não responderam eram servidores
 de e-mail.
 
-31
-00:01:19.240 --> 00:01:22.240
+28
+00:01:14.390 --> 00:01:17.390
 Só o shopify passa de 11 mil tokens.
 
-32
-00:01:22.320 --> 00:01:24.933
+29
+00:01:17.470 --> 00:01:20.083
 Isso é limite de custo e de janela,
 
-33
-00:01:25.000 --> 00:01:26.103
+30
+00:01:20.150 --> 00:01:21.253
 não do modelo.
 
-34
-00:01:26.170 --> 00:01:29.183
+31
+00:01:21.320 --> 00:01:24.333
 Daria para analisar em partes
 e juntar uma síntese.
 
-35
-00:01:29.250 --> 00:01:33.633
+32
+00:01:24.400 --> 00:01:28.783
 O ReconAI preferiu reduzir
 para 3.500 tokens antes de enviar.
 
-36
-00:01:33.700 --> 00:01:38.150
+33
+00:01:28.850 --> 00:01:33.300
 O Claude recusou a tarefa,
 e a recusa virou resultado.
 
-37
-00:01:38.230 --> 00:01:42.830
+34
+00:01:33.380 --> 00:01:37.980
 O experimento seguiu com dois modelos
 abertos, rodando na própria máquina.
 
-38
-00:01:42.970 --> 00:01:46.670
+35
+00:01:38.120 --> 00:01:41.633
 Foram 320 execuções sem erro de formato.
 
-39
-00:01:46.850 --> 00:01:50.110
-O chain-of-thought gerou uma vez e
+36
+00:01:41.700 --> 00:01:45.043
+O chain-of-thought gerou uma vez
+e meia mais hipóteses,
 
-40
-00:01:51.880 --> 00:01:56.520
-meia mais hipóteses, mas levou o dobro
-do tempo e variou três vezes mais.
+37
+00:01:45.110 --> 00:01:48.470
+mas levou o dobro do tempo
+e variou três vezes mais.
 
-41
-00:01:57.090 --> 00:01:58.953
+38
+00:01:49.040 --> 00:01:50.903
 E custo nunca é zero.
 
-42
-00:01:59.020 --> 00:02:03.220
+39
+00:01:50.970 --> 00:01:55.170
 As 320 execuções gastaram 27 centavos
 de energia.
 
-43
-00:02:03.440 --> 00:02:07.800
+40
+00:01:55.390 --> 00:01:59.750
 No Claude Sonnet,
 sairiam por cerca de 5 dólares e meio.
 
-44
-00:02:08.280 --> 00:02:12.073
+41
+00:02:00.230 --> 00:02:04.023
 A tabela de confiança
 das fontes foi entregue a outra IA,
 
-45
-00:02:12.140 --> 00:02:13.973
+42
+00:02:04.090 --> 00:02:05.923
 com o pedido de criticar.
 
-46
-00:02:14.040 --> 00:02:17.440
+43
+00:02:05.990 --> 00:02:09.390
 Ela apontou que faltava medir
 se o dado está certo.
 
-47
-00:02:17.720 --> 00:02:18.740
+44
+00:02:09.480 --> 00:02:10.113
 Medimos.
 
-48
-00:02:19.380 --> 00:02:22.380
+45
+00:02:10.180 --> 00:02:13.180
 94% dos nomes ainda existem.
 
-49
-00:02:29.800 --> 00:02:31.413
+46
+00:02:20.600 --> 00:02:22.213
 Sete rodadas depois,
 
-50
-00:02:31.480 --> 00:02:32.493
+47
+00:02:22.280 --> 00:02:23.293
 falta o principal.
 
-51
-00:02:32.560 --> 00:02:34.893
+48
+00:02:23.360 --> 00:02:25.693
 Um especialista, que não é o autor,
 
-52
-00:02:34.960 --> 00:02:36.493
+49
+00:02:25.760 --> 00:02:27.293
 julgar tudo às cegas.
 
-53
-00:02:36.560 --> 00:02:39.220
+50
+00:02:27.360 --> 00:02:30.020
 Misturado às hipóteses
 de um analista humano.

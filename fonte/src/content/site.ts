@@ -436,7 +436,7 @@ export const video = {
   arquivo: "/video/reconai-resumo.mp4",
   legenda: "/video/reconai-resumo.vtt",
   poster: "/video/reconai-resumo.webp",
-  duracao: "2 min 42 s",
+  duracao: "2 min 33 s",
   nota: "Narração do autor, gravada em 17/11/2026. A legenda segue a fala.",
 };
 

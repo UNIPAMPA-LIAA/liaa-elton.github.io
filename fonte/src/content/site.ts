@@ -432,12 +432,12 @@ export const rodadas = {
 export const video = {
   titulo: "O projeto em vídeo",
   texto:
-    "Uma retrospectiva animada do projeto, do problema à Rodada 7, com legendas. A identidade visual do vídeo é outra, porque ele foi feito como peça à parte.",
+    "Uma retrospectiva animada do projeto, do problema à Rodada 7, narrada pelo autor e com legendas. A identidade visual do vídeo é outra, porque ele foi feito como peça à parte.",
   arquivo: "/video/reconai-resumo.mp4",
   legenda: "/video/reconai-resumo.vtt",
   poster: "/video/reconai-resumo.webp",
-  duracao: "2 min 48 s",
-  nota: "Versão de 2 min 48 s, ainda sem narração: a legenda segue o roteiro. A narração, com a voz do autor, entra na próxima versão.",
+  duracao: "2 min 42 s",
+  nota: "Narração do autor, gravada em 17/11/2026. A legenda segue a fala.",
 };
 
 export const obras = {

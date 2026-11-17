@@ -2,37 +2,40 @@
 
 Site do projeto **ReconAI**, de Elton Lunardi, na disciplina Laboratório de
 Inteligência Artificial Aplicada (LIAA). Apresenta o contexto, o problema, a
-proposta e a evolução do projeto ao longo do semestre.
+proposta e a evolução do projeto ao longo do semestre, com os dados do
+experimento e um vídeo de resumo.
 
-HTML, CSS e JS puros, sem etapa de build. O GitHub Pages serve os arquivos como estão.
-
-```
-index.html              conteúdo
-assets/style.css        visual (tema claro e escuro)
-assets/app.js           grade do experimento, resultados, modo apresentação
-data/experimento.js     dados do experimento (gerado, não editar à mão)
-tools/atualizar_dados.py  gera data/experimento.js a partir de results/
-```
-
-## Atualizar os números do experimento
-
-O script lê `results/execucoes.csv` do projeto (e, quando existirem,
-`results/humano/*.json` e `results/avaliacao_cega_*.csv`):
-
-```bash
-python3 tools/atualizar_dados.py --projeto ..   # pasta que contém results/
-git commit -am "Atualiza dados do experimento" && git push
-```
-
-## Modo apresentação
-
-Tecla **P** (ou o botão no topo): cada seção vira um slide em tela cheia.
-Setas ou PageUp/PageDown navegam, Esc sai. Funciona também abrindo o
-`index.html` direto do disco, sem internet para tudo exceto as fontes.
-
-## Publicação
-
-Repositório: https://github.com/UNIPAMPA-LIAA/liaa-elton.github.io
 Site: https://unipampa-liaa.github.io/liaa-elton.github.io/
 
-GitHub Pages: *Settings → Pages → Deploy from a branch*, `main`, pasta `/ (root)`.
+## O que está neste repositório
+
+```
+index.html, _next/, video/   o site pronto, gerado (não editar à mão)
+.nojekyll                    faz o GitHub Pages servir a pasta _next/
+fonte/                       o código-fonte do site
+```
+
+O código-fonte é um projeto Next.js 16 com exportação estática, Tailwind v4,
+shadcn e motion. Todo o texto fica em `fonte/src/content/site.ts`; os números
+do experimento e da coleta, em `fonte/src/data/*.json`.
+
+## Atualizar os dados e publicar
+
+```bash
+cd fonte
+npm install
+python3 tools/atualizar_dados.py   # lê results/execucoes.csv do projeto e grava src/data/experimento.json
+python3 tools/dados_coleta.py      # grava src/data/coleta.json a partir das coletas
+bash tools/publicar.sh             # gera o site e copia para a raiz deste repositório
+git add -A && git commit -m "Atualiza o site" && git push
+```
+
+Os dois scripts de dados procuram o projeto em `~/Área de trabalho/Mestrado/LIAA`;
+use `--projeto <pasta>` para apontar outro lugar.
+
+Para ver localmente antes de publicar: `npx next build` e sirva a pasta `out/`
+num caminho `/liaa-elton.github.io/` (o site usa esse basePath).
+
+## GitHub Pages
+
+*Settings → Pages → Deploy from a branch*, `main`, pasta `/ (root)`.

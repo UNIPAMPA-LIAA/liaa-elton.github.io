@@ -1,0 +1,99 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.673
+10.577 subdomínios.
+
+2
+00:00:03.740 --> 00:00:07.463
+Foi o que uma busca passiva achou
+para o shopify.com,
+
+3
+00:00:07.530 --> 00:00:09.453
+e ninguém lê tudo isso à mão.
+
+4
+00:00:09.520 --> 00:00:15.173
+O ReconAI pergunta se um modelo de
+linguagem consegue transformar essa lista
+
+5
+00:00:15.240 --> 00:00:19.733
+em hipóteses de ataque tão boas
+quanto as de um especialista.
+
+6
+00:00:19.800 --> 00:00:21.503
+São quatro módulos.
+
+7
+00:00:21.570 --> 00:00:23.853
+Coleta sem atacar o alvo,
+
+8
+00:00:23.920 --> 00:00:27.393
+cruzamento com vulnerabilidades
+conhecidas, hipóteses
+
+9
+00:00:27.460 --> 00:00:30.413
+geradas pelo modelo e avaliação às cegas.
+
+10
+00:00:30.480 --> 00:00:33.883
+No caminho,
+a pesquisa mediu as próprias fontes.
+
+11
+00:00:33.950 --> 00:00:38.113
+Só 4% dos nomes apareceram
+em uma segunda fonte.
+
+12
+00:00:38.180 --> 00:00:41.033
+A janela do modelo tem 8 mil tokens,
+
+13
+00:00:41.100 --> 00:00:46.200
+e só couberam as 52 assinaturas
+mais interessantes para um atacante.
+
+14
+00:00:47.100 --> 00:00:51.013
+O Claude recusou a tarefa,
+e a recusa virou resultado.
+
+15
+00:00:51.080 --> 00:00:54.513
+O experimento seguiu
+com dois modelos abertos,
+
+16
+00:00:54.580 --> 00:00:56.513
+rodando na própria máquina.
+
+17
+00:00:56.580 --> 00:00:58.920
+Foram 320 execuções,
+
+18
+00:00:59.160 --> 00:01:01.353
+sem nenhum erro de formato.
+
+19
+00:01:01.420 --> 00:01:06.600
+O chain-of-thought gerou mais hipóteses,
+mas variou três vezes mais.
+
+20
+00:01:18.630 --> 00:01:20.233
+Sete rodadas depois,
+
+21
+00:01:20.300 --> 00:01:21.583
+falta o principal:
+
+22
+00:01:21.650 --> 00:01:25.100
+um especialista julgar tudo às cegas.

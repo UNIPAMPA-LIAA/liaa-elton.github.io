@@ -1,0 +1,213 @@
+{
+ "title": "Escolha o mundo visual do site do ReconAI",
+ "question": "O sorteio atribuiu o Mapa de metrô. Fique com ele, escolha uma alternativa ou peça um novo sorteio.",
+ "options": [
+  {
+   "id": "assigned",
+   "label": "Mapa de metrô",
+   "kicker": "THE ROLL",
+   "lineage": "diagramas de metrô no estilo Beck e a sinalização de estação",
+   "thesis": "O projeto inteiro como uma rede: o pipeline é uma linha, as fontes são outra que se cruza com ela, as rodadas são a terceira, e o que falta fazer aparece tracejado, em obras.",
+   "palette": [
+    "#FFFFFF",
+    "#15171A",
+    "#D7263D",
+    "#0072CE",
+    "#00965E",
+    "#8A8F98"
+   ],
+   "materials": [
+    "linhas de cor chapada com cantos de 45°",
+    "estações em círculo branco com contorno",
+    "placa de estação em preto",
+    "legenda como as de mapa de transporte"
+   ],
+   "viewport": "Faixa preta de placa de estação no topo, com o nome ReconAI e as seções como linhas. À esquerda, a coluna de leitura com a pergunta de pesquisa. À direita, o mapa vivo do pipeline: 10.577 → 2.491 → 76 → 52 → ~8 hipóteses como estações, a linha das fontes cruzando o M1 e o M2, e a linha das rodadas R1 a R7 embaixo.",
+   "risk": "Se o mapa virar só ilustração, perde a força. Ele precisa ser a navegação de verdade: cada estação leva à sua seção e cada número tem fonte.",
+   "raised": [
+    {
+     "from": "design-canon-raygun-layout-desk",
+     "raise": "A grade só quebra onde o conteúdo é mais urgente: a recusa do Claude é uma estação fechada, com a linha interrompida."
+    },
+    {
+     "from": "digital-design-canon-dark-first-developer-console",
+     "raise": "Limites e pendências ficam isolados por espaço vazio, longe dos resultados, para nunca serem lidos como conquista."
+    },
+    {
+     "from": "paper-folds-pleats-deployable-miura-orbit-sheet",
+     "raise": "Um controle propaga para o mapa inteiro: escolher um alvo ou um modelo acende as estações e os números correspondentes em todas as seções."
+    },
+    {
+     "from": "rivers-tides-ocean-depths-mesophotic-deep-dive",
+     "raise": "Cada número fica preso à sua estação e à data da coleta, como uma leitura de profundidade presa ao ponto do mergulho."
+    },
+    {
+     "from": "operate-c-cracktro-scroller-queue",
+     "raise": "Hierarquia por peso de linha e tamanho de estação, sem caixas nem cards em volta do conteúdo."
+    },
+    {
+     "from": "operate-a-cutting-bench-select-rail",
+     "raise": "O que ficou para depois continua à vista: baseline humano e avaliação cega são estações tracejadas, em obras, na mesma linha."
+    }
+   ],
+   "html": ".impeccable/mocks/decision/assigned.html"
+  },
+  {
+   "id": "model-pick",
+   "label": "Carta náutica",
+   "kicker": "IMPECCABLE’S PICK",
+   "lineage": "cartas náuticas de levantamento hidrográfico",
+   "thesis": "Cada número do projeto é uma sondagem com data e fonte de levantamento, e o que ainda não foi medido aparece como área não sondada.",
+   "palette": [
+    "#DCEFF6",
+    "#BFE0EE",
+    "#F2E6A7",
+    "#14191F",
+    "#B5157C"
+   ],
+   "materials": [
+    "sondagens em itálico",
+    "curvas de profundidade tracejadas",
+    "cartucho de título",
+    "rosa dos ventos em magenta",
+    "moldura com graduação"
+   ],
+   "viewport": "Cartucho de título amarelo-areia à esquerda com o ReconAI e as datas do levantamento, a coluna de leitura em branco embaixo dele, e à direita o mar dos subdomínios: 10.577, 2.491, 76, 52 e ~8 como sondagens descendo para o fundo, com uma nota em magenta marcando a avaliação cega como área não sondada.",
+   "risk": "É a direção que eu escolheria, e cartas náuticas são um recurso já usado em visualização de dados. Precisa de rigor de cartógrafo para não virar enfeite.",
+   "html": ".impeccable/mocks/decision/model-pick.html"
+  },
+  {
+   "id": "challenger-raygun",
+   "label": "Mesa de diagramação de revista surf",
+   "verdict": "declined",
+   "lineage": "design-canon-raygun-layout-desk",
+   "palette": [
+    "#F4F1EA",
+    "#111111",
+    "#FF3B1F"
+   ],
+   "materials": [
+    "colunas colidindo",
+    "tipo impresso sobre a foto"
+   ],
+   "case": "Perde nos dois eixos: o professor precisa de ordem de leitura e rastreabilidade, e a colagem destrói as duas.",
+   "kept": "A grade só quebra onde o conteúdo é mais urgente.",
+   "hero": "https://impeccable.style/worlds/cards/design-canon-raygun-layout-desk-hero.webp"
+  },
+  {
+   "id": "challenger-console",
+   "label": "Console escuro de desenvolvedor",
+   "verdict": "declined",
+   "lineage": "digital-design-canon-dark-first-developer-console",
+   "palette": [
+    "#16181D",
+    "#E6E8EB",
+    "#7EE787"
+   ],
+   "materials": [
+    "painéis com costura de 1 px",
+    "acentos de sintaxe"
+   ],
+   "case": "Perde nos dois eixos: é o clichê visual de segurança e veste a página de leitura como ferramenta.",
+   "kept": "Isolamento deliberado com espaço vazio para o que é negativo.",
+   "hero": "https://impeccable.style/worlds/cards/digital-design-canon-dark-first-developer-console-hero.webp"
+  },
+  {
+   "id": "challenger-miura",
+   "label": "Folha dobrável Miura",
+   "verdict": "declined",
+   "lineage": "paper-folds-pleats-deployable-miura-orbit-sheet",
+   "palette": [
+    "#FFFFFF",
+    "#C9A227",
+    "#9DB8D9"
+   ],
+   "materials": [
+    "vincos em paralelogramo",
+    "folha de ouro"
+   ],
+   "case": "Perde nos dois eixos: o público não reconhece a dobradura, e ela não explica pipeline nem fontes.",
+   "kept": "Um controle que propaga pela folha inteira.",
+   "hero": "https://impeccable.style/worlds/cards/paper-folds-pleats-deployable-miura-orbit-sheet-hero.webp"
+  },
+  {
+   "id": "challenger-mergulho",
+   "label": "Mergulho mesofótico",
+   "verdict": "declined",
+   "lineage": "rivers-tides-ocean-depths-mesophotic-deep-dive",
+   "palette": [
+    "#0B2A4A",
+    "#5FD3E6",
+    "#F2F5F7"
+   ],
+   "materials": [
+    "eixo vertical de profundidade",
+    "neve marinha"
+   ],
+   "case": "Perde nos dois eixos: a descida explica bem o funil, mas não o pipeline, as fontes e as rodadas, e o mergulho é alheio ao público.",
+   "kept": "Toda leitura presa à sua profundidade e fase exatas.",
+   "hero": "https://impeccable.style/worlds/cards/rivers-tides-ocean-depths-mesophotic-deep-dive-hero.webp"
+  },
+  {
+   "id": "challenger-cracktro",
+   "label": "Tela de cracktro",
+   "verdict": "declined",
+   "lineage": "operate-c-cracktro-scroller-queue",
+   "palette": [
+    "#050505",
+    "#EDE6D3",
+    "#FFB000"
+   ],
+   "materials": [
+    "fonte bitmap",
+    "poeira em camadas"
+   ],
+   "case": "Perde nos dois eixos: estética hacker é exatamente o caminho batido que o projeto precisa evitar.",
+   "kept": "Hierarquia sem caixas: só profundidade, peso e espaço.",
+   "hero": "https://impeccable.style/worlds/cards/operate-c-cracktro-scroller-queue-hero.webp"
+  },
+  {
+   "id": "challenger-corte",
+   "label": "Mesa de corte de filme",
+   "verdict": "declined",
+   "lineage": "operate-a-cutting-bench-select-rail",
+   "palette": [
+    "#000000",
+    "#F26B1D",
+    "#FFFFFF"
+   ],
+   "materials": [
+    "trilho perfurado",
+    "fita laranja"
+   ],
+   "case": "Perde nos dois eixos: o trilho de quadros serviria às rodadas, mas o mapa de linhas já carrega isso com um vocabulário que o público conhece.",
+   "kept": "O que foi deixado de lado continua alcançável, visível na mesma estrutura.",
+   "hero": "https://impeccable.style/worlds/cards/operate-a-cutting-bench-select-rail-hero.webp"
+  }
+ ],
+ "reroll": {
+  "registers": [
+   "safer",
+   "bolder"
+  ]
+ },
+ "canon": true,
+ "canonCard": {
+  "label": "O padrão da categoria",
+  "thesis": "A página de documentação acadêmica que todo projeto publica, feita com capricho.",
+  "palette": [
+   "#FFFFFF",
+   "#111827",
+   "#2563EB"
+  ],
+  "materials": [
+   "sumário lateral",
+   "fonte do sistema",
+   "vídeo no topo"
+  ],
+  "viewport": "Barra superior com o nome do projeto, sumário à esquerda, título e resumo no centro com o vídeo logo abaixo, e o índice da página à direita.",
+  "risk": "Fica idêntico a qualquer outro site de projeto, por definição.",
+  "html": ".impeccable/mocks/decision/canon.html"
+ },
+ "steer": true
+}

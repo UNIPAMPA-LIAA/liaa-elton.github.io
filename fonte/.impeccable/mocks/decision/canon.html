@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+:root{--ink:#111827;--mute:#4B5563;--rule:#E5E7EB;--link:#2563EB;--side:#F9FAFB}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;height:900px;overflow:hidden;background:#fff;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.top{height:64px;border-bottom:1px solid var(--rule);display:flex;align-items:center;padding:0 32px;gap:12px}
+.top b{font-size:18px}.top span{color:var(--mute);font-size:14px}
+.top a{margin-left:auto;font-size:14px;color:var(--link);text-decoration:none}
+.wrap{display:grid;grid-template-columns:260px 1fr 240px;height:836px}
+aside{background:var(--side);border-right:1px solid var(--rule);padding:28px 24px;font-size:14px;line-height:2.1}
+aside a{display:block;color:var(--mute);text-decoration:none}aside a.on{color:var(--link);font-weight:600}
+main{padding:48px 64px}
+main .crumb{font-size:13px;color:var(--mute)}
+main h1{font-size:44px;line-height:1.1;letter-spacing:-.02em;margin:10px 0 18px;max-width:20ch}
+main p{font-size:17px;line-height:1.65;color:#1F2937;max-width:66ch;margin-bottom:14px}
+.video{margin-top:22px;width:720px;height:405px;background:#0F172A;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#CBD5E1;font-size:15px}
+.toc{padding:48px 24px;font-size:13px;line-height:2;color:var(--mute);border-left:1px solid var(--rule)}
+.toc b{color:var(--ink);display:block;margin-bottom:6px}
+</style></head><body>
+<header class="top"><b>ReconAI</b><span>Projeto de mestrado · LIAA 2026</span><a href="#">Repositório no GitHub</a></header>
+<div class="wrap">
+  <aside><a class="on" href="#">Visão geral</a><a href="#">Contexto</a><a href="#">Problema</a><a href="#">Proposta: pipeline M1–M4</a><a href="#">Coleta</a><a href="#">Confiança das fontes</a><a href="#">Experimento</a><a href="#">Evolução (R1–R7)</a><a href="#">Próximos passos</a></aside>
+  <main>
+    <div class="crumb">Visão geral</div>
+    <h1>Hipóteses de ataque a partir de reconhecimento passivo</h1>
+    <p>Um LLM consegue transformar dados de reconhecimento passivo em hipóteses de ataque priorizadas, com qualidade comparável à de um especialista? O ReconAI coleta os dados sem atacar o alvo, mede a confiança de cada fonte e compara modelos e prompts em 320 execuções.</p>
+    <div class="video">▶ Vídeo: o projeto em 2 min 50 s</div>
+  </main>
+  <nav class="toc"><b>Nesta página</b>Resumo em vídeo<br>A pergunta<br>Números principais<br>Como ler este site</nav>
+</div>
+</body></html>

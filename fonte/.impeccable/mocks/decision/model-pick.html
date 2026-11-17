@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Libre+Caslon+Text:ital,wght@1,400;1,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#FFFFFF;--shoal:#BFE0EE;--shoal2:#DCEFF6;--land:#F2E6A7;--ink:#14191F;--mag:#B5157C;--mute:#4D5A66;--rule:#14191F}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;height:900px;overflow:hidden;background:var(--shoal2);color:var(--ink);font-family:"Atkinson Hyperlegible",sans-serif}
+.frame{position:absolute;inset:18px;border:2px solid var(--rule);outline:1px solid var(--rule);outline-offset:-8px}
+.ticks{position:absolute;inset:18px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 60px) top/100% 8px no-repeat,repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 60px) bottom/100% 8px no-repeat}
+.sea{position:absolute;inset:34px;overflow:hidden;background:radial-gradient(ellipse 60% 70% at 78% 55%,var(--deep) 0 38%,var(--shoal2) 39% 58%,var(--shoal) 59% 100%)}
+.contour{position:absolute;border:1.5px dashed var(--ink);border-radius:50%;opacity:.35}
+.title{position:absolute;left:34px;top:34px;width:600px;background:var(--land);border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:26px 34px 30px}
+.title .t1{font:800 12px "Libre Franklin";letter-spacing:.18em;text-transform:uppercase}
+.title h1{font:800 54px/1 "Libre Franklin";letter-spacing:-.02em;margin:10px 0 6px}
+.title .t2{font:italic 400 20px "Libre Caslon Text";color:#4A3F12}
+.title .meta{margin-top:14px;font:600 12px "Libre Franklin";line-height:1.6}
+.title .meta b{color:var(--mag)}
+nav{position:absolute;left:34px;top:270px;width:600px;background:var(--land);border-right:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:4px 18px;padding:12px 34px;font:600 14px "Libre Franklin"}
+nav a{color:var(--ink);text-decoration:none}nav a.on{color:var(--mag);text-decoration:underline}
+.read{position:absolute;left:34px;top:318px;bottom:34px;width:600px;background:#fff;border-right:2px solid var(--ink);padding:30px 34px}
+.read h2{font:800 30px/1.1 "Libre Franklin";margin-bottom:16px}
+.read p{font-size:17px;line-height:1.6;max-width:62ch;margin-bottom:14px}
+.read .src{font:600 12px "Libre Franklin";color:var(--mute);border-top:1px solid #C9D2D9;padding-top:10px}
+.s{position:absolute;font:italic 700 26px "Libre Caslon Text";color:var(--ink)}
+.s small{display:block;font:600 11px "Libre Franklin";font-style:normal;color:var(--mute)}
+.wname{position:absolute;font:italic 400 22px "Libre Caslon Text";color:var(--mute);letter-spacing:.2em}
+.note{position:absolute;font:700 12px "Libre Franklin";color:var(--mag);max-width:230px;line-height:1.4}
+.rose{position:absolute;right:90px;bottom:80px;width:150px;height:150px;border:2px solid var(--mag);border-radius:50%;background:repeating-conic-gradient(var(--mag) 0 1deg,transparent 1deg 10deg);-webkit-mask:radial-gradient(circle,transparent 56%,#000 57%)}
+</style></head><body>
+<div class="sea">
+  <div class="contour" style="left:720px;top:120px;width:560px;height:620px"></div>
+  <div class="contour" style="left:820px;top:220px;width:380px;height:420px"></div>
+  <div class="contour" style="left:910px;top:320px;width:200px;height:220px"></div>
+  <div class="wname" style="left:760px;top:70px">MAR DOS SUBDOMÍNIOS</div>
+  <div class="s" style="left:700px;top:150px">10.577<small>nomes · 03/11/2026</small></div>
+  <div class="s" style="left:800px;top:250px">2.491<small>hosts que resolvem · 12/10</small></div>
+  <div class="s" style="left:880px;top:350px">76<small>grupos de assinatura</small></div>
+  <div class="s" style="left:960px;top:440px">52<small>grupos no contexto</small></div>
+  <div class="s" style="left:1030px;top:520px;color:var(--mag)">~8<small>hipóteses por execução</small></div>
+  <div class="s" style="left:1180px;top:220px">4,2<small>% dos nomes em 2+ fontes</small></div>
+  <div class="s" style="left:1150px;top:640px">0,855<small>concordância httpx × Censys</small></div>
+  <div class="note" style="left:700px;top:600px">⚠ ÁREA NÃO SONDADA: o julgamento cego das hipóteses ainda não foi feito. Não afirmar acerto do LLM.</div>
+  <div class="rose"></div>
+</div>
+<div class="frame"></div><div class="ticks"></div>
+<header class="title">
+  <div class="t1">Carta de reconhecimento passivo · Nº 1</div>
+  <h1>ReconAI</h1>
+  <div class="t2">hipóteses de ataque a partir do que já é público</div>
+  <div class="meta">Levantamento de 12/10 a 12/11/2026 · Elton Lunardi · LIAA<br>Sondagens em contagens medidas; <b>magenta</b> marca o que ainda não foi verificado.</div>
+</header>
+<nav><a class="on" href="#">Contexto</a><a href="#">Problema</a><a href="#">Pipeline</a><a href="#">Coleta</a><a href="#">Fontes</a><a href="#">Experimento</a><a href="#">Rodadas</a><a href="#">Vídeo</a></nav>
+<article class="read">
+  <h2>Um LLM transforma reconhecimento passivo em hipóteses de ataque tão boas quanto as de um especialista?</h2>
+  <p>Um pentest começa com milhares de nomes. O ReconAI coleta esses dados sem atacar o alvo, mede quanto cada fonte merece confiança e pede a dois modelos abertos as hipóteses de ataque.</p>
+  <p>Cada número desta carta traz a data e a fonte do levantamento, como uma sondagem.</p>
+  <div class="src">Diagrama de fontes: subfinder, dnsx, httpx, Censys, NVD, EPSS · coletas de 12/10, 03/11 e 12/11/2026</div>
+</article>
+</body></html>

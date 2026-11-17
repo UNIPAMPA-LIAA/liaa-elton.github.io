@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T08:17:31+00:00",
+  "title": "Design System: ReconAI",
+  "extensions": {
+    "colorMeta": {
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#15171a",
+        "oklch": "oklch(20.4% 0.007 258.4)",
+        "tonalRamp": [
+          "#090b0e",
+          "#232528",
+          "#404246",
+          "#5f6165",
+          "#808286",
+          "#a2a5a9",
+          "#c6c9ce",
+          "#eceff3"
+        ]
+      },
+      "tinta-2": {
+        "role": "neutral",
+        "displayName": "Tinta Segunda",
+        "canonical": "#31353c",
+        "oklch": "oklch(32.8% 0.014 261.7)",
+        "tonalRamp": [
+          "#080b11",
+          "#21252c",
+          "#3e4249",
+          "#5d6169",
+          "#7e838b",
+          "#a0a5ae",
+          "#c4c9d2",
+          "#e9eff8"
+        ]
+      },
+      "suave": {
+        "role": "neutral",
+        "displayName": "Suave",
+        "canonical": "#5b606b",
+        "oklch": "oklch(48.9% 0.019 266.1)",
+        "tonalRamp": [
+          "#080b13",
+          "#21252e",
+          "#3d424c",
+          "#5c616c",
+          "#7d828e",
+          "#9fa5b1",
+          "#c3c9d6",
+          "#e9effc"
+        ]
+      },
+      "fio": {
+        "role": "neutral",
+        "displayName": "Fio",
+        "canonical": "#d9dce1",
+        "oklch": "oklch(89.4% 0.008 260.7)",
+        "tonalRamp": [
+          "#090b0e",
+          "#232529",
+          "#404246",
+          "#5f6166",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9ce",
+          "#eceff4"
+        ]
+      },
+      "painel": {
+        "role": "neutral",
+        "displayName": "Painel",
+        "canonical": "#f3f4f6",
+        "oklch": "oklch(96.7% 0.003 264.5)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242526",
+          "#414243",
+          "#606163",
+          "#818284",
+          "#a4a5a7",
+          "#c8c9cb",
+          "#edeef0"
+        ]
+      },
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "linha-pipeline": {
+        "role": "primary",
+        "displayName": "Vermelho Pipeline",
+        "canonical": "#d7263d",
+        "oklch": "oklch(57.1% 0.209 21.1)",
+        "tonalRamp": [
+          "#260000",
+          "#540004",
+          "#850014",
+          "#b50d2c",
+          "#e13c4a",
+          "#ff7073",
+          "#ffa8a6",
+          "#ffe1de"
+        ]
+      },
+      "linha-fontes": {
+        "role": "secondary",
+        "displayName": "Azul Fontes",
+        "canonical": "#0072ce",
+        "oklch": "oklch(55.0% 0.166 252.2)",
+        "tonalRamp": [
+          "#000533",
+          "#00225b",
+          "#004187",
+          "#0061b6",
+          "#2d84dc",
+          "#61a9f8",
+          "#90ceff",
+          "#bef3ff"
+        ]
+      },
+      "linha-rodadas": {
+        "role": "tertiary",
+        "displayName": "Verde Rodadas",
+        "canonical": "#00965e",
+        "oklch": "oklch(59.3% 0.138 158.3)",
+        "tonalRamp": [
+          "#001301",
+          "#003112",
+          "#00522b",
+          "#007545",
+          "#169a63",
+          "#5abc88",
+          "#8cdeb0",
+          "#bcffd8"
+        ]
+      },
+      "linha-rodadas-texto": {
+        "role": "tertiary",
+        "displayName": "Verde Rodadas Texto",
+        "canonical": "#00744a",
+        "oklch": "oklch(49.3% 0.112 159.6)",
+        "tonalRamp": [
+          "#001302",
+          "#003115",
+          "#00512e",
+          "#00744a",
+          "#45956d",
+          "#73b692",
+          "#a0d8b8",
+          "#ccfce0"
+        ]
+      },
+      "obra": {
+        "role": "neutral",
+        "displayName": "Obra",
+        "canonical": "#8a8f98",
+        "oklch": "oklch(64.9% 0.015 262.4)",
+        "tonalRamp": [
+          "#080b11",
+          "#21252c",
+          "#3e424a",
+          "#5d616a",
+          "#7e838b",
+          "#a0a5ae",
+          "#c4c9d3",
+          "#e9eff9"
+        ]
+      },
+      "obra-texto": {
+        "role": "neutral",
+        "displayName": "Obra Texto",
+        "canonical": "#5b606b",
+        "oklch": "oklch(48.9% 0.019 266.1)",
+        "tonalRamp": [
+          "#080b13",
+          "#21252e",
+          "#3d424c",
+          "#5c616c",
+          "#7d828e",
+          "#9fa5b1",
+          "#c3c9d6",
+          "#e9effc"
+        ]
+      },
+      "placa-texto": {
+        "role": "neutral",
+        "displayName": "Texto de Placa",
+        "canonical": "#d6d9dd",
+        "oklch": "oklch(88.4% 0.006 255.5)",
+        "tonalRamp": [
+          "#090b0e",
+          "#232528",
+          "#404245",
+          "#5f6165",
+          "#808286",
+          "#a2a5a9",
+          "#c6c9cd",
+          "#eceff3"
+        ]
+      },
+      "placa-trilho": {
+        "role": "neutral",
+        "displayName": "Trilho de Placa",
+        "canonical": "#6b7079",
+        "oklch": "oklch(54.4% 0.015 262.3)",
+        "tonalRamp": [
+          "#080b12",
+          "#21252d",
+          "#3e424a",
+          "#5d616a",
+          "#7d838c",
+          "#a0a5af",
+          "#c4c9d3",
+          "#e9eff9"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "A pergunta de pesquisa na abertura; 2.2rem no celular, 3.1rem a partir de md."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Título de cada estação (seção); 2rem no celular, 3.25rem a partir de md."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Subtítulos, nomes de módulos, rodadas e itens em obras; 1.25rem a 1.5rem."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Números grandes presos a estações e achados, algarismos tabulares."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Todo o texto corrido, medida de 68ch."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Introduções de seção e parágrafos de abertura, em tinta-2."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Rótulos do seletor, cabeçalhos de tabela, legendas do mapa e botões."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Códigos M1 a M4, datas, notas de estação, nomes de arquivo."
+      }
+    },
+    "shadows": [
+      {
+        "name": "trem",
+        "value": "0 2px 6px rgba(0,0,0,0.45)",
+        "purpose": "Só no marcador de trem da placa do topo. Única sombra do sistema."
+      }
+    ],
+    "motion": [
+      {
+        "name": "trem-mola",
+        "value": "spring(stiffness: 220, damping: 40, mass: 0.6)",
+        "purpose": "O trem desliza entre estações acompanhando a rolagem; com movimento reduzido salta para a estação inteira."
+      },
+      {
+        "name": "acender-linha",
+        "value": "280ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Seletor de linha apaga o que não pertence à combinação escolhida; duração zero com movimento reduzido."
+      },
+      {
+        "name": "estacao-placa",
+        "value": "200ms",
+        "purpose": "Troca de cor das estações da placa (passou, aqui, próxima)."
+      },
+      {
+        "name": "rolagem-ancora",
+        "value": "scroll-behavior: smooth; scroll-padding-top: 6.5rem",
+        "purpose": "Saltos do mapa e da placa param abaixo da placa fixa; auto com movimento reduzido."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal, como 'Seguir a linha'; placa de tinta que acende em vermelho.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Seguir a linha</a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:3px;background:var(--tinta,#15171a);color:var(--papel,#fff);font-family: Overpass, system-ui, sans-serif;font-size:1rem;font-weight:800;text-decoration:none;transition:background-color .15s}.ds-btn-primary:hover{background:var(--linha-pipeline,#d7263d)}.ds-btn-primary:focus-visible{outline:3px solid var(--linha-fontes,#0072ce);outline-offset:3px}"
+    },
+    {
+      "name": "Botão secundário",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Ação secundária, como 'Assistir ao resumo em vídeo'; contorno de tinta.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Assistir ao resumo em vídeo</a>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:3px;border:2px solid var(--tinta,#15171a);background:var(--papel,#fff);color:var(--tinta,#15171a);font-family: Overpass, system-ui, sans-serif;font-size:1rem;font-weight:800;text-decoration:none;transition:color .15s,border-color .15s}.ds-btn-secondary:hover{border-color:var(--linha-pipeline,#d7263d);color:var(--linha-pipeline,#d7263d)}.ds-btn-secondary:focus-visible{outline:3px solid var(--linha-fontes,#0072ce);outline-offset:3px}"
+    },
+    {
+      "name": "Placa de estações",
+      "kind": "nav",
+      "refersTo": "station-board",
+      "description": "Faixa de tinta fixa no topo: roundel, nome e a linha vermelha com o trem na estação atual.",
+      "html": "<nav class=\"ds-board\"><svg width=\"40\" height=\"40\" viewBox=\"0 0 40 40\" aria-hidden=\"true\"><circle cx=\"20\" cy=\"20\" r=\"14\" fill=\"none\" stroke=\"#d7263d\" stroke-width=\"7\"/><rect x=\"0\" y=\"16\" width=\"40\" height=\"8\" fill=\"#0072ce\"/></svg><span class=\"ds-board-name\">ReconAI</span><ol class=\"ds-board-line\"><li class=\"ds-st ds-st-passou\"><span></span>Início</li><li class=\"ds-st ds-st-aqui\"><span></span>Pipeline</li><li class=\"ds-st\"><span></span>Coleta</li><li class=\"ds-st\"><span></span>Em obras</li></ol></nav>",
+      "css": ".ds-board{display:flex;align-items:center;gap:24px;padding:16px 40px;background:var(--tinta,#15171a);color:var(--papel,#fff)}.ds-board-name{font-family: Overpass, system-ui, sans-serif;font-size:1.5rem;font-weight:900;line-height:1}.ds-board-line{position:relative;flex:1;display:flex;justify-content:space-between;list-style:none;margin:0;padding:0}.ds-board-line::before{content:'';position:absolute;left:5px;right:5px;top:11px;height:6px;border-radius:9999px;background:var(--linha-pipeline,#d7263d)}.ds-st{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-family: Overpass, system-ui, sans-serif;font-size:13px;font-weight:600;line-height:1;color:#d6d9dd;cursor:pointer}.ds-st span{width:28px;height:28px;box-sizing:border-box;border-radius:9999px;border:4px solid var(--tinta,#15171a);background:var(--papel,#fff);transition:border-color .2s,background-color .2s}.ds-st:hover{color:#fff}.ds-st:hover span{border-color:var(--linha-pipeline,#d7263d)}.ds-st-passou{color:#9ba0a8}.ds-st-passou span{border-color:#6b7079;background:#2a2d33}.ds-st-aqui{color:#fff}.ds-st-aqui span{border-color:#fff;background:var(--linha-pipeline,#d7263d)}"
+    },
+    {
+      "name": "Seletor de linha",
+      "kind": "chip",
+      "refersTo": "line-toggle",
+      "description": "Grupo de botões que acende uma combinação de modelo e prompt no experimento.",
+      "html": "<div class=\"ds-toggle\" role=\"group\" aria-label=\"Acender uma linha\"><button aria-pressed=\"true\">Todas</button><button aria-pressed=\"false\">Llama few-shot</button><button aria-pressed=\"false\">Llama CoT</button><button aria-pressed=\"false\">Qwen few-shot</button><button aria-pressed=\"false\">Qwen CoT</button></div>",
+      "css": ".ds-toggle{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;border:2px solid var(--tinta,#15171a);border-radius:3px;background:var(--tinta,#15171a);overflow:hidden}.ds-toggle button{height:44px;padding:0 8px;border:0;background:var(--papel,#fff);color:var(--tinta,#15171a);font-family: Overpass, system-ui, sans-serif;font-size:.875rem;font-weight:700;cursor:pointer}.ds-toggle button:hover{background:var(--painel,#f3f4f6)}.ds-toggle button[aria-pressed=true]{background:var(--tinta,#15171a);color:var(--papel,#fff)}.ds-toggle button:focus-visible{outline:3px solid var(--linha-fontes,#0072ce);outline-offset:-3px}"
+    },
+    {
+      "name": "Trilho de seção",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Cada seção com o trilho da sua linha à esquerda e a estação na altura do título.",
+      "html": "<section class=\"ds-secao\"><div class=\"ds-trilho\"><i></i><b></b></div><div><h2>O pipeline</h2><p>Quatro módulos em Python, ligados como estações de uma linha.</p></div></section><section class=\"ds-secao ds-obra\"><div class=\"ds-trilho\"><i></i><b></b></div><div><h2>Em obras</h2><p>Falta a estação que dá sentido à linha inteira.</p></div></section>",
+      "css": ".ds-secao{display:grid;grid-template-columns:5rem minmax(0,1fr)}.ds-trilho{position:relative}.ds-trilho i{position:absolute;top:0;bottom:0;left:50%;width:9px;transform:translateX(-50%);background:var(--linha-pipeline,#d7263d)}.ds-trilho b{position:absolute;left:50%;top:2.6rem;width:34px;height:34px;box-sizing:border-box;transform:translateX(-50%);border-radius:9999px;border:7px solid var(--tinta,#15171a);background:var(--papel,#fff)}.ds-secao h2{margin:2rem 0 0;font-family: Overpass, system-ui, sans-serif;font-size:2.5rem;font-weight:900;line-height:1.05;letter-spacing:-.015em;color:var(--tinta,#15171a)}.ds-secao p{max-width:68ch;margin:1rem 0 2.5rem;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-size:1.125rem;line-height:1.625;color:var(--tinta-2,#31353c)}.ds-obra .ds-trilho i{background:repeating-linear-gradient(180deg,var(--obra,#8a8f98) 0 18px,transparent 18px 30px)}.ds-obra .ds-trilho b{border-color:var(--obra,#8a8f98);border-style:dashed}"
+    },
+    {
+      "name": "Tabela com classificação",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Tabela de dados: régua de tinta no cabeçalho, fios entre linhas, níveis por peso e não por cor.",
+      "html": "<div class=\"ds-rolavel\" role=\"region\" aria-label=\"Scorecard\" tabindex=\"0\"><table class=\"ds-tabela\"><thead><tr><th>Fonte</th><th>Frescor</th><th>Verificabilidade</th></tr></thead><tbody><tr><th>httpx</th><td><b class=\"ds-alta\">Alta</b></td><td><b class=\"ds-media\">Média</b></td></tr><tr><th>Censys</th><td><b class=\"ds-baixa\">Baixa</b></td><td><b class=\"ds-alta\">Alta</b></td></tr></tbody></table></div>",
+      "css": ".ds-rolavel{overflow-x:auto}.ds-rolavel:focus-visible{outline:3px solid var(--linha-fontes,#0072ce);outline-offset:3px}.ds-tabela{width:100%;min-width:32rem;border-collapse:collapse;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--tinta,#15171a)}.ds-tabela thead tr{border-bottom:2px solid var(--tinta,#15171a)}.ds-tabela thead th{padding:8px 12px;text-align:left;font-family: Overpass, system-ui, sans-serif;font-size:.875rem;color:var(--tinta-2,#31353c)}.ds-tabela tbody tr{border-bottom:1px solid var(--fio,#d9dce1)}.ds-tabela tbody th{padding:12px;text-align:left;font-family: Overpass, system-ui, sans-serif;font-weight:800}.ds-tabela td{padding:12px}.ds-tabela b{font-family: Overpass, system-ui, sans-serif;}.ds-alta{font-weight:900;color:var(--tinta,#15171a)}.ds-media{font-weight:600;color:var(--tinta,#15171a)}.ds-baixa{font-weight:600;color:var(--suave,#5b606b)}"
+    },
+    {
+      "name": "Título com código",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Código de estação dentro do título, nunca acima dele.",
+      "html": "<h3 class=\"ds-titulo-codigo\"><span>M1</span>Coletor</h3><h3 class=\"ds-titulo-codigo ds-obra-t\"><span>M4</span>Avaliação</h3>",
+      "css": ".ds-titulo-codigo{margin:0 0 12px;font-family: Overpass, system-ui, sans-serif;font-size:1.5rem;font-weight:900;line-height:1.25;color:var(--tinta,#15171a)}.ds-titulo-codigo span{margin-right:8px;font-family:'Overpass Mono',ui-monospace,monospace;font-size:1rem;font-weight:600;color:var(--suave,#5b606b)}.ds-obra-t{color:var(--obra-texto,#5b606b)}"
+    },
+    {
+      "name": "Painel do vídeo",
+      "kind": "card",
+      "refersTo": "video-frame",
+      "description": "Moldura de tinta que isola o vídeo, peça com identidade própria.",
+      "html": "<figure class=\"ds-video\"><div class=\"ds-video-quadro\"><div class=\"ds-video-tela\"></div></div><figcaption>Retrospectiva com legenda em português.</figcaption></figure>",
+      "css": ".ds-video{margin:0;max-width:40rem}.ds-video-quadro{padding:12px;border-radius:3px;background:var(--tinta,#15171a)}.ds-video-tela{aspect-ratio:16/9;border-radius:3px;background:#2a2d33}.ds-video figcaption{margin-top:12px;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-size:.875rem;color:var(--suave,#5b606b)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "O mapa de metrô",
+    "overview": "O site inteiro é uma rede de transporte desenhada no estilo de Harry Beck. O pipeline é a linha vermelha, as fontes de dados são a linha azul que cruza M1 e M2, as rodadas com o professor são a linha verde e o que falta fazer é um trecho tracejado cinza, em obras. Cada seção é uma estação: o trilho corre pela margem esquerda na cor da linha a que a seção pertence, e o título é a parada. A placa preta no topo é o painel do vagão, com um trem que anda pela linha vermelha conforme a leitura avança.\n\nA superfície é papel branco e tinta quase preta, com linhas chapadas e estações em círculo branco de contorno grosso. Não há cards, sombras de superfície nem gradientes: a hierarquia vem do peso da linha, do tamanho da estação, do peso da letra e do espaço. A leitura é longa e atenta (um professor que confere cada número), então o corpo de texto usa uma face feita para legibilidade e uma medida de 68 caracteres; a sinalização usa uma face de placa, pesada e condensada no espírito, e os códigos e datas usam a mono da mesma família.\n\nO sistema recusa o site de segurança escuro com terminal e neon e a documentação genérica de sumário lateral. O escuro aparece só como placa: o painel do topo, o rodapé, o bloco de código e a moldura do vídeo.",
+    "keyCharacteristics": [
+      "Fundo branco, tinta #15171a, quatro linhas de cor chapada e nada mais de cor.",
+      "Cor diz \"qual linha\", nunca \"bom ou ruim\".",
+      "Estações são círculos brancos de contorno grosso; o trecho em obras é tracejado.",
+      "Três faces com papéis fixos: Overpass sinaliza, Overpass Mono codifica, Atkinson Hyperlegible Next conta.",
+      "Plano, sem cards e sem sombra de superfície; separação por fios, réguas e espaço.",
+      "Números com algarismos tabulares, sempre presos a estação e data."
+    ],
+    "rules": [
+      {
+        "name": "The Qual Linha Rule",
+        "body": "Cor responde a uma pergunta só: a que linha isto pertence. Nunca codifica bom, ruim, alerta ou sucesso. Avaliações usam peso: Alta em Overpass black na tinta, Média em semibold na tinta, Baixa em semibold no suave.",
+        "section": "colors"
+      },
+      {
+        "name": "The Traço e Letra Rule",
+        "body": "A cor cheia de uma linha é para traço, ponto e barra. Texto colorido usa a variante \"-texto\" ou a tinta; nenhuma letra pequena em verde ou cinza cheio.",
+        "section": "colors"
+      },
+      {
+        "name": "The Obra Tracejada Rule",
+        "body": "O que não existe ainda é cinza e tracejado, em todo lugar: no mapa, no trilho da seção, no contorno da estação e na régua do item. Nunca desenhe uma pendência com traço cheio.",
+        "section": "colors"
+      },
+      {
+        "name": "The Código na Linha Rule",
+        "body": "Não há sobretítulo (eyebrow) acima de título. Códigos como M1 ou o número da fase entram na mesma linha do título, em mono semibold no suave, à esquerda do nome; a data de uma rodada entra à direita, na mesma linha de base.",
+        "section": "typography"
+      },
+      {
+        "name": "The Três Vozes Rule",
+        "body": "Overpass nunca vira corpo de texto e Atkinson nunca vira título ou número grande. A mono só aparece para códigos, datas e dados literais.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rolagem Contida Rule",
+        "body": "Só a tabela rola para o lado, dentro de uma região com rótulo e foco; o corpo da página nunca.",
+        "section": "layout"
+      },
+      {
+        "name": "The Placa Plana Rule",
+        "body": "Separação é fio, régua ou espaço: fio de 1px entre linhas de tabela, régua de 2px de tinta no cabeçalho, régua de 3px no topo de um bloco. Nunca uma caixa com sombra.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** atribuir cada seção, gráfico e marcador a uma das quatro linhas e usar só a cor dessa linha.",
+      "**Do** codificar avaliações por peso: Alta em 900 na tinta, Média em 600 na tinta, Baixa em 600 no suave.",
+      "**Do** pôr códigos (M1, número da fase) dentro do título, em mono semibold no suave, e datas na mesma linha de base.",
+      "**Do** desenhar tudo o que ainda não existe em cinza obra e tracejado.",
+      "**Do** usar a variante \"-texto\" (ou a tinta) sempre que uma cor de linha virar letra.",
+      "**Do** manter o corpo de texto em até 68ch e as tabelas largas dentro da própria região de rolagem.",
+      "**Do** converter o mapa em lista vertical de estações mais a fileira verde R1 a R7 abaixo de md.",
+      "**Do** emoldurar peças com identidade própria, como o vídeo, num painel de tinta."
+    ],
+    "donts": [
+      "**Don't** usar cor para dizer bom, ruim, alerta ou sucesso; nenhum verde de \"ok\" nem vermelho de \"erro\".",
+      "**Don't** pôr sobretítulo (eyebrow) ou etiqueta em caixa alta acima de um título.",
+      "**Don't** usar cards, sombras de superfície ou gradientes decorativos; a única sombra é a do trem.",
+      "**Don't** criar uma quinta cor de linha ou um tom intermediário de uma linha existente.",
+      "**Don't** deixar a página rolar na horizontal.",
+      "**Don't** usar Overpass para corpo de texto nem Atkinson para títulos e números.",
+      "**Don't** voltar ao site de segurança escuro com terminal e neon; o escuro é só placa."
+    ]
+  }
+}

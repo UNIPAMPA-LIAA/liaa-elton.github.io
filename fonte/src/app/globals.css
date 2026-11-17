@@ -1,0 +1,141 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Rede do ReconAI: tokens do mapa de metrô.
+   As linhas usam a cor cheia; texto colorido usa a variante "-texto",
+   que passa de 4,5:1 sobre branco. */
+:root {
+  --tinta: #15171a;
+  --tinta-2: #31353c;
+  --suave: #5b606b;
+  --fio: #d9dce1;
+  --painel: #f3f4f6;
+  --papel: #ffffff;
+
+  --linha-pipeline: #d7263d;
+  --linha-fontes: #0072ce;
+  --linha-rodadas: #00965e;
+  --linha-rodadas-texto: #00744a;
+  --obra: #8a8f98;
+  --obra-texto: #5b606b;
+
+  /* shadcn */
+  --background: var(--papel);
+  --foreground: var(--tinta);
+  --card: var(--papel);
+  --card-foreground: var(--tinta);
+  --popover: var(--tinta);
+  --popover-foreground: var(--papel);
+  --primary: var(--tinta);
+  --primary-foreground: var(--papel);
+  --secondary: var(--painel);
+  --secondary-foreground: var(--tinta);
+  --muted: var(--painel);
+  --muted-foreground: var(--suave);
+  --accent: var(--painel);
+  --accent-foreground: var(--tinta);
+  --destructive: var(--linha-pipeline);
+  --border: var(--fio);
+  --input: var(--fio);
+  --ring: var(--linha-fontes);
+  --radius: 0.25rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  --color-tinta: var(--tinta);
+  --color-tinta-2: var(--tinta-2);
+  --color-suave: var(--suave);
+  --color-fio: var(--fio);
+  --color-painel: var(--painel);
+  --color-papel: var(--papel);
+  --color-pipeline: var(--linha-pipeline);
+  --color-fontes: var(--linha-fontes);
+  --color-rodadas: var(--linha-rodadas);
+  --color-rodadas-texto: var(--linha-rodadas-texto);
+  --color-obra: var(--obra);
+  --color-obra-texto: var(--obra-texto);
+
+  --font-sans: var(--font-leitura), system-ui, sans-serif;
+  --font-sinal: var(--font-sinal), system-ui, sans-serif;
+  --font-mono: var(--font-codigo), ui-monospace, monospace;
+  --font-heading: var(--font-sinal), system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--tinta-2) var(--painel);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: var(--font-leitura), system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-sinal), system-ui, sans-serif;
+    text-wrap: balance;
+    letter-spacing: -0.015em;
+  }
+  html {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 114, 206, 0.18);
+  }
+  p, li, dd {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--linha-fontes);
+    color: var(--papel);
+  }
+  :focus-visible {
+    outline: 3px solid var(--linha-fontes);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1.5px;
+  }
+  td, th, .num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@utility medida {
+  max-width: 68ch;
+}

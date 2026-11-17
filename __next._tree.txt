@@ -1,0 +1,6 @@
+:HL["/liaa-elton.github.io/_next/static/chunks/1zy5p9b670rp8.css","style"]
+:HL["/liaa-elton.github.io/_next/static/media/10b40a20e4e62717.p.2dv7oiayrgfo5.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/liaa-elton.github.io/_next/static/media/ff0a690452bfd4f5-s.p.07m19b7gifklb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/liaa-elton.github.io/_next/static/media/ffb8bbde65c71325-s.p.2o35gi0pd5-30.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+1:[["children",{"s":"__PAGE__","h":160}]]
+0:{"b":"qLXeoHnmeWGspiLVBAmYn","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

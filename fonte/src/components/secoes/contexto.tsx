@@ -1,5 +1,6 @@
 import { contexto } from "@/content/site";
 import { Secao, Sub } from "@/components/linha/secao";
+import { DesenhoPentest } from "./desenho-pentest";
 
 export function Contexto() {
   return (
@@ -9,6 +10,10 @@ export function Contexto() {
           {p}
         </p>
       ))}
+
+      <Sub>{contexto.desenhoTitulo}</Sub>
+      <p className="medida mt-3 leading-relaxed text-tinta-2">{contexto.desenhoIntro}</p>
+      <DesenhoPentest />
 
       <Sub>{contexto.fasesTitulo}</Sub>
       <p className="medida mt-3 leading-relaxed text-tinta-2">{contexto.fasesIntro}</p>

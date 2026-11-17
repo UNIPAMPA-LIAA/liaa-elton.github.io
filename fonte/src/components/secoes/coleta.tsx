@@ -2,6 +2,7 @@ import coletaDados from "@/data/coleta.json";
 import { coleta } from "@/content/site";
 import { Rolavel, Secao, Sub } from "@/components/linha/secao";
 import { WaffleHosts } from "./waffle-hosts";
+import { MapaFontes, MapaHosts } from "./mapas-coleta";
 import { fmt } from "@/lib/base";
 
 const TIPO: Record<string, string> = {
@@ -150,6 +151,15 @@ export function Coleta() {
         ) : null}
         <li>Todo nome da HackerTarget também aparece no DNSDumpster, que é da mesma empresa: as duas concordarem não confirma nada.</li>
       </ul>
+
+      <Sub>{coleta.origemTitulo}</Sub>
+      <p className="medida mt-3 leading-relaxed text-tinta-2">{coleta.origemTexto}</p>
+      <MapaFontes />
+
+      <Sub>{coleta.hostsMapaTitulo}</Sub>
+      <p className="medida mt-3 leading-relaxed text-tinta-2">{coleta.hostsMapaTexto}</p>
+      <MapaHosts />
+      <p className="medida mt-4 leading-relaxed text-tinta-2">{coleta.hostsMapaLeitura}</p>
 
       <Sub>{coleta.mapaTitulo}</Sub>
       <p className="medida mt-3 leading-relaxed text-tinta-2">{coleta.mapaTexto}</p>

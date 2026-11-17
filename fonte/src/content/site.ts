@@ -59,6 +59,55 @@ export const contexto = {
     { nome: "Relatório", texto: "achados, risco e correção", reconai: false },
   ],
   fasesNota: "Tudo depois da modelagem de ameaças continua manual e só acontece com autorização.",
+  desenhoTitulo: "Um pentest, desenhado",
+  desenhoIntro:
+    "O analista tem autorização e escopo. Para conhecer o alvo, ele pode perguntar de quatro jeitos, do mais distante ao mais invasivo. O ReconAI usa os três primeiros; o quarto já é a fase ativa.",
+  analista: { titulo: "Analista", texto: "com autorização e escopo" },
+  alvo: { titulo: "Alvo", texto: "shopify.com" },
+  trilhas: [
+    {
+      n: 1,
+      titulo: "Pergunta a quem já coletou",
+      ferramenta: "subfinder",
+      destino: "bases de terceiros",
+      exemplos: "VirusTotal · crt.sh · THC · HackerTarget",
+      efeito: "o alvo não vê nada",
+      linha: "fontes",
+      tocaAlvo: false,
+    },
+    {
+      n: 2,
+      titulo: "Pergunta ao DNS público",
+      ferramenta: "dnsx",
+      destino: "resolvedores DNS",
+      exemplos: "o nome existe? para qual IP aponta?",
+      efeito: "o site não é tocado",
+      linha: "fontes",
+      tocaAlvo: false,
+    },
+    {
+      n: 3,
+      titulo: "Uma visita comum por host",
+      ferramenta: "httpx",
+      destino: "o próprio alvo",
+      exemplos: "status, título, servidor, tecnologia",
+      efeito: "baixo contato: o alvo vê um visitante",
+      linha: "pipeline",
+      tocaAlvo: true,
+    },
+    {
+      n: 4,
+      titulo: "Varredura de portas e exploração",
+      ferramenta: "nmap, nuclei…",
+      destino: "o próprio alvo",
+      exemplos: "fase ativa",
+      efeito: "fora do ReconAI, só com autorização",
+      linha: "obra",
+      tocaAlvo: true,
+    },
+  ] as { n: number; titulo: string; ferramenta: string; destino: string; exemplos: string; efeito: string; linha: LinhaId; tocaAlvo: boolean }[],
+  volta: ["dados de 1 a 3", "M1 agrupa", "M2: NVD e EPSS", "M3: o modelo lê", "hipóteses"],
+  voltaNota: "As hipóteses voltam ao analista, que valida cada uma na fase ativa.",
 };
 
 export const problema = {
@@ -78,9 +127,9 @@ export const problema = {
         "Ninguém sabe quantos ativos o alvo tem de verdade nem quais hipóteses estão certas antes da fase ativa. A qualidade precisa ser julgada por um especialista, às cegas.",
     },
     {
-      titulo: "O contexto não cabe",
+      titulo: "O contexto não cabe numa chamada só",
       texto:
-        "O JSON enriquecido do shopify tem cerca de 11,6 mil tokens, e o modelo local trabalha com uma janela de 8 mil. Por isso, escolher o que entra no contexto já faz parte da análise.",
+        "O JSON enriquecido do shopify tem cerca de 11,6 mil tokens, e a janela configurada para o modelo local é de 8 mil. É um limite da chamada e do custo, não do modelo: dá para ler os dados em partes. O ReconAI preferiu reduzir antes de enviar, e escolher o que entra no contexto já faz parte da análise.",
     },
   ],
 };
@@ -154,6 +203,31 @@ export const coleta = {
   cruzaTitulo: "O que o subfinder cruza",
   cruzaTexto:
     "Cada linha é uma combinação de fontes. Os pontos marcam quais fontes viram aqueles nomes; a barra mostra quantos nomes caem na combinação.",
+  origemTitulo: "Quem está por trás de cada fonte",
+  origemTexto:
+    "O subfinder é só o carteiro: cada nome vem de uma base mantida por outra organização, em outro país, e quase nenhuma coletou o dado ela mesma. O ponto cheio é fonte que devolveu nomes do shopify.com; o vazado, fonte consultada que não devolveu nada. O mapa marca a sede de quem opera cada base, não onde o servidor fica.",
+  origemSemSede: "Sem sede confirmada: THC (grupo internacional, devolveu nomes), RapidDNS, SiteDossier e Reconeer.",
+  origemNota:
+    "Apuração de 17/11/2026 nas páginas oficiais de cada operador. Os endereços das APIs saíram do código do subfinder v2.12.0. As fontes de cada afirmação estão em docs/fontes_subfinder_origem.md, no repositório.",
+  sedes: [
+    { id: "vt", nome: "VirusTotal", local: "Málaga, Espanha", lat: 36.72, lon: -4.42, devolveu: true, operador: "Google (Chronicle)", dados: "DNS passivo das URLs e arquivos que os usuários enviam e de parceiros", dx: -14, dy: 34, ancora: "end" },
+    { id: "ct", nome: "crt.sh", local: "Scottsdale, EUA", lat: 33.49, lon: -111.93, devolveu: true, operador: "Sectigo", dados: "logs públicos de Certificate Transparency mantidos por Google, Cloudflare, DigiCert, Let's Encrypt e outros", dx: -12, dy: 34, ancora: "end" },
+    { id: "ht", nome: "HackerTarget e DNSDumpster", local: "Canberra, Austrália", lat: -35.28, lon: 149.13, devolveu: true, operador: "Hacker Target Pty Ltd", dados: "base de DNS própria montada com Rapid7, Censys, CT e buscadores", dx: -14, dy: 30, ancora: "end" },
+    { id: "sf", nome: "Anubis e Internet Archive", local: "San Francisco, EUA", lat: 37.77, lon: -122.42, devolveu: false, dx: -12, dy: -14, ancora: "end" },
+    { id: "cc", nome: "Common Crawl", local: "Beverly Hills, EUA", lat: 34.07, lon: -118.4, devolveu: false, dx: -14, dy: 8, ancora: "end" },
+    { id: "cs", nome: "Censys", local: "Ann Arbor, EUA", lat: 42.28, lon: -83.74, devolveu: false, dx: 4, dy: -16, ancora: "middle" },
+    { id: "tc", nome: "ThreatCrowd", local: "Plano, EUA", lat: 33.02, lon: -96.7, devolveu: false, dx: 12, dy: 22, ancora: "start" },
+    { id: "dg", nome: "Digitorus", local: "Halsteren, Holanda", lat: 51.53, lon: 4.27, devolveu: false, dx: 12, dy: -14, ancora: "start" },
+    { id: "lx", nome: "LeakIX", local: "Lessines, Bélgica", lat: 50.7, lon: 3.82, devolveu: false, dx: 14, dy: 10, ancora: "start" },
+    { id: "hr", nome: "Hudson Rock", local: "Tel Aviv, Israel", lat: 32.09, lon: 34.78, devolveu: false, dx: 12, dy: 6, ancora: "start" },
+  ],
+  hostsMapaTitulo: "Onde ficam os hosts",
+  hostsMapaTexto:
+    "Os 78 IPs da coleta de 12/10, localizados por uma base pública de geolocalização. O tamanho do ponto é o número de hosts que apontam para lá; os pontos cinza vazados são os 43 servidores de e-mail que não responderam HTTP. Um host aponta para vários IPs, por isso as contas dos pontos somam mais que 2.491.",
+  hostsMapaLeitura:
+    "Nenhum dos 78 IPs está numa rede do próprio Shopify: todos são de Cloudflare, Google Cloud, Amazon CloudFront ou SendGrid. O ponto em São Paulo é da CloudFront, que costuma responder pela borda mais perto de quem pergunta; a coleta foi feita do Brasil.",
+  hostsMapaNota:
+    "Localização pelo registro do IP (DB-IP lite, edição de novembro de 2026, licença CC BY 4.0), sem tocar o alvo. Em CDN o mesmo IP responde de vários países (anycast), então o ponto mostra onde o bloco de IPs está registrado, não onde a loja roda.",
   mapaTitulo: "Os 2.491 hosts, um por quadrado",
   mapaTexto:
     "Coleta de 12/10/2026, a usada no experimento. Os quadrados seguem a ordem dos grupos do M1, do maior para o menor: hosts que respondem igual ficam juntos.",
@@ -166,30 +240,33 @@ export const fontesSecao = {
     "Na Rodada 4 o professor pediu para medir a confiança das fontes. A primeira resposta foi um quadro com notas dadas por julgamento. Na rodada seguinte cada eixo ganhou uma conta e um limiar fixo, calculados pelo m_confianca.py. Oito notas mudaram quando passaram a ser medidas: sete caíram e só o rendimento do httpx subiu.",
   origensTitulo: "De onde vem cada dado",
   origens: [
-    { origem: "Primeira mão", fonte: "httpx", linha: "pipeline" as LinhaId, texto: "observa o alvo agora, com uma requisição HTTP comum" },
-    { origem: "Infra ao vivo", fonte: "dnsx", linha: "fontes" as LinhaId, texto: "consulta o DNS agora; quem responde é a infraestrutura pública, não o site" },
-    { origem: "Herdado", fonte: "subfinder, Censys", linha: "obra" as LinhaId, texto: "alguém coletou antes e o pipeline lê o que ficou guardado" },
-    { origem: "Correlação", fonte: "NVD", linha: "fontes" as LinhaId, texto: "cruza a versão observada com uma base pública" },
-    { origem: "Modelo", fonte: "EPSS", linha: "obra" as LinhaId, texto: "estimativa estatística, não observação" },
+    { origem: "Primeira mão", fonte: "httpx", linha: "pipeline" as LinhaId, contato: "o alvo, na borda da CDN", natureza: "observação", texto: "observa o alvo agora, com uma requisição HTTP comum" },
+    { origem: "Infra ao vivo", fonte: "dnsx", linha: "fontes" as LinhaId, contato: "infraestrutura de terceiros", natureza: "observação", texto: "consulta o DNS agora; quem responde é a infraestrutura pública, não o site" },
+    { origem: "Herdado", fonte: "subfinder, Censys", linha: "obra" as LinhaId, contato: "nenhum", natureza: "observação de outro, guardada", texto: "alguém coletou antes e o pipeline lê o que ficou guardado" },
+    { origem: "Correlação", fonte: "NVD", linha: "fontes" as LinhaId, contato: "nenhum", natureza: "correlação", texto: "cruza a versão observada com uma base pública" },
+    { origem: "Modelo", fonte: "EPSS", linha: "obra" as LinhaId, contato: "nenhum", natureza: "estimativa de modelo", texto: "estimativa estatística, não observação" },
   ],
-  scorecardTitulo: "Scorecard medido",
+  origensNota:
+    "Contato e natureza viraram colunas separadas depois da crítica da IA (abaixo): o quanto a fonte toca o alvo é uma decisão de risco; o tipo de dado é uma decisão de confiança.",
+  scorecardTitulo: "Scorecard medido, revisto depois da crítica",
   scorecardLegenda:
-    "Coleta de 03/11/2026. Entre parênteses, a nota dada por julgamento na rodada anterior, quando mudou.",
+    "Rendimento e frescor da coleta de 03/11/2026; verificabilidade pela régua de 0 a 8. A nota só vale se o intervalo de 95% inteiro cai numa faixa só; se atravessa o limite, fica indeterminada. Em cinza, o que mudou com a crítica.",
+  // n/d: numerador e denominador do rendimento, como o m_confianca.py contou.
   scorecard: [
-    { fonte: "subfinder", rend: ["Alta", "88,5%"], fresc: ["n/d", ""], verif: ["Baixa", "1/3 (era Alta)"], origem: "Herdado" },
-    { fonte: "dnsx", rend: ["n/d", ""], fresc: ["Alta", "0 d"], verif: ["Média", "2/3 (era Alta)"], origem: "Infra ao vivo" },
-    { fonte: "httpx", rend: ["Alta", "99,5% (era Média)"], fresc: ["Alta", "0 d"], verif: ["Média", "2/3 (era Alta)"], origem: "Primeira mão" },
-    { fonte: "Censys", rend: ["Baixa", "23,2%* (era Média)"], fresc: ["n/d", ""], verif: ["Baixa", "0/3 (era Média)"], origem: "Herdado" },
-    { fonte: "NVD", rend: ["Média", "75% (era Alta)"], fresc: ["n/d", ""], verif: ["Alta", "3/3"], origem: "Correlação" },
-    { fonte: "EPSS", rend: ["Alta", "100%"], fresc: ["Alta", "1 d"], verif: ["Baixa", "1/3 (era Média)"], origem: "Modelo" },
-  ],
+    { fonte: "subfinder", rend: { n: 9391, d: 10610 }, fresc: ["n/d", ""], verif: 2, contato: "nenhum", mudou: "verificabilidade pela régua nova; acurácia por fonte na tabela de baixo" },
+    { fonte: "dnsx", rend: null, fresc: ["Alta", "0 d"], verif: 4, contato: "infraestrutura", mudou: "" },
+    { fonte: "httpx", rend: { n: 9346, d: 9396 }, fresc: ["Alta", "0 d"], verif: 4, contato: "alvo (borda)", mudou: "evidência caiu de 2 para 1: o pipeline guarda status, título e tecnologia, não a resposta bruta" },
+    { fonte: "Censys", rend: { n: 19, d: 82, limiteInferior: true }, fresc: ["n/d", ""], verif: 1, contato: "nenhum", mudou: "rendimento de Baixa para indeterminado: 23,2% é só o limite inferior" },
+    { fonte: "NVD", rend: { n: 3, d: 4 }, fresc: ["n/d", ""], verif: 7, contato: "nenhum", mudou: "rendimento de Média para indeterminado (só 4 produtos); o registro é Alta, mas a ligação versão → CVE é Média" },
+    { fonte: "EPSS", rend: { trivial: true }, fresc: ["Alta", "1 d"], verif: 4, contato: "nenhum", mudou: "rendimento sem sentido (o EPSS pontua todo CVE publicado); verificabilidade de Baixa para Média, como a régua já dizia" },
+  ] as { fonte: string; rend: null | { n?: number; d?: number; limiteInferior?: boolean; trivial?: boolean }; fresc: string[]; verif: number; contato: string; mudou: string }[],
   scorecardNota:
-    "* Limite inferior: a única coleta com crédito na Censys (12/10) não registrou quais IPs foram consultados.",
+    "Intervalo de Wilson a 95%. Antes da crítica, o scorecard ainda usava a régua de 0 a 3 na verificabilidade e por isso discordava da régua nova no EPSS.",
   eixos: [
     { nome: "Rendimento", texto: "o que a fonte devolveu dividido pelo que recebeu. Alta a partir de 80%, Média de 40% a 80%, Baixa abaixo. Não é cobertura: cobertura exigiria saber o total real de ativos, e esse gabarito não existe." },
     { nome: "Frescor", texto: "dias entre a observação do dado e a coleta. Alta até 1 dia, Média até 30, Baixa acima." },
-    { nome: "Verificabilidade", texto: "se um terceiro, só com acesso público, chega ao mesmo dado e consegue provar que ele é autêntico." },
-    { nome: "Origem", texto: "se a fonte toca o alvo ou não. É categórica." },
+    { nome: "Verificabilidade", texto: "se um terceiro, só com acesso público, chega ao mesmo dado e consegue provar que ele é autêntico. Medida pela régua de 0 a 8 descrita abaixo." },
+    { nome: "Contato", texto: "quanto a fonte toca o alvo: nenhum, infraestrutura de terceiros ou o próprio alvo. É categórico e decide o risco, não a confiança." },
   ],
   achadosTitulo: "O que a medição mostrou",
   achados: [
@@ -209,15 +286,50 @@ export const fontesSecao = {
   ],
   reguaFontes: [
     { fonte: "CT (crt.sh)", r: 2, a: 2, o: 2, e: 2, antes: "referência" },
-    { fonte: "NVD", r: 2, a: 1, o: 2, e: 2, antes: "3 Alta" },
-    { fonte: "httpx", r: 1, a: 0, o: 2, e: 2, antes: "2 Média" },
+    { fonte: "NVD (o registro do CVE)", r: 2, a: 1, o: 2, e: 2, antes: "3 Alta" },
+    { fonte: "NVD (versão → CVE)", r: 1, a: 0, o: 2, e: 1, antes: "nova linha" },
+    { fonte: "httpx", r: 1, a: 0, o: 2, e: 1, antes: "2 Média" },
     { fonte: "dnsx", r: 1, a: 0, o: 2, e: 1, antes: "2 Média" },
     { fonte: "EPSS", r: 2, a: 1, o: 1, e: 0, antes: "1 Baixa" },
     { fonte: "subfinder", r: 1, a: 0, o: 0, e: 1, antes: "1 Baixa" },
     { fonte: "Censys", r: 0, a: 0, o: 0, e: 1, antes: "0 Baixa" },
   ],
   reguaNota:
-    "É uma proposta para discussão: os níveis ainda são atribuídos, mas cada um tem definição fixa e duas pessoas chegam à mesma nota.",
+    "Os níveis ainda são atribuídos, mas cada um tem definição fixa e duas pessoas chegam à mesma nota. Teto: se R ou E for 0, a nota fica no máximo Média, qualquer que seja a soma.",
+  reguaTeto: "Teto aplicado",
+  porTipoTitulo: "Como verificar cada tipo de fonte",
+  porTipoIntro:
+    "A régua diz quanto um dado pode ser verificado. Esta tabela diz como: para cada tipo de fonte, a técnica que confere o dado e a regra escrita que decide se ele conta como verificado. Qualquer pessoa que siga a regra chega ao mesmo resultado.",
+  porTipo: [
+    { tipo: "Subdomínio de Certificate Transparency", fontes: "crt.sh", tecnica: "Baixar o certificado e conferir a prova de inclusão no log público (o SCT assinado pelo operador do log).", regra: "Verificado se o certificado traz SCT de um log aceito pelos navegadores e o nome aparece no campo de nomes do certificado.", nivel: "Alta" },
+    { tipo: "Subdomínio de DNS passivo", fontes: "VirusTotal, THC, HackerTarget, DNSDumpster", tecnica: "Resolver o nome hoje com o dnsx e procurar o mesmo nome numa fonte de outro operador.", regra: "Confirmado se resolve e aparece em fonte de outro operador; existe hoje se só resolve; não confirmado se não resolve. HackerTarget e DNSDumpster contam como um operador só.", nivel: "Baixa" },
+    { tipo: "Resolução DNS", fontes: "dnsx", tecnica: "Repetir a consulta em dois resolvedores públicos diferentes e procurar assinatura DNSSEC.", regra: "Reproduzido se os dois resolvedores devolvem os mesmos IPs. Autêntico só se a zona tiver DNSSEC: o shopify.com não tem (conferido em 17/11).", nivel: "Média" },
+    { tipo: "Resposta HTTP", fontes: "httpx", tecnica: "Repetir a requisição e guardar a resposta bruta com o hash; classificar o IP pelo dono (CDN ou próprio).", regra: "Reproduzido se status, título e cabeçalho Server se repetem em duas coletas. Se o IP é de CDN, o dado descreve a borda, não a aplicação.", nivel: "Média" },
+    { tipo: "Varredura herdada", fontes: "Censys", tecnica: "Conferir o mesmo serviço com o httpx na mesma porta.", regra: "Confirmado se o software coincide com o do httpx; sem httpx na porta, não confirmado.", nivel: "Baixa" },
+    { tipo: "Base de vulnerabilidades", fontes: "NVD", tecnica: "Abrir o registro do CVE na NVD e no CVE.org e conferir se o CPE casa com a versão vista.", regra: "Confirmado se o registro existe e o CPE casa com a versão. CVE ainda sem análise da NVD não tem CPE: a ligação versão → CVE fica parcial. A NVD só expõe parte do que foi registrado, e é por isso que a ligação é Média e não Alta.", nivel: "Média" },
+    { tipo: "Estimativa de modelo", fontes: "EPSS", tecnica: "Consultar a nota na API pública da FIRST, pela data.", regra: "Reproduzido se a mesma data devolve a mesma nota. O modelo é descrito em artigo, mas o dado de treino é fechado: a nota estima a chance de exploração, nunca a confirma.", nivel: "Média" },
+  ],
+  acuraciaTitulo: "Acurácia: quanto de cada fonte existe de verdade",
+  acuraciaTexto:
+    "Nenhum eixo da tabela dizia se o dado está certo. Para os subdomínios dá para medir: os nomes que o subfinder trouxe em 12/11 foram resolvidos de novo pelo dnsx em 17/11, separados pela fonte que viu cada um.",
+  acuraciaLeitura:
+    "Acurácia e verificabilidade são coisas diferentes. O crt.sh é a única fonte que dá para provar e é a que menos resolve: certificado antigo continua no log depois que o nome sai do ar. O VirusTotal não dá para provar, mas quase tudo o que ele traz ainda existe.",
+  criticaTitulo: "A tabela questionada por uma IA",
+  criticaIntro:
+    "Na Rodada 7 o professor pediu para provocar um bom modelo a criticar a tabela de confiança: as características bastam? as ponderações estão certas? A tabela foi enviada como estava publicada ao Claude Opus 5.5, numa sessão nova, sem o histórico do projeto, com o pedido de ser cético. Ele levantou sete pontos; cada um teve uma resposta.",
+  criticaMetodo: "Claude Opus 5.5, 17/11/2026, sessão sem histórico e sem ferramentas. Pedido e resposta completos em docs/critica_ia_tabela_confianca.md.",
+  critica: [
+    { ponto: "Os eixos bastam? Falta acurácia: nada mede se o dado está certo.", resposta: "Medida para os subdomínios: quantos nomes de cada fonte ainda resolvem (tabela acima).", estado: "medido" },
+    { ponto: "As ponderações estão certas? Não há pesos, e a régua soma tudo com peso igual.", resposta: "Teto na régua (R ou E igual a 0 limita a Média). Proposto: acurácia e verificabilidade como portão; abaixo do mínimo o dado entra no contexto como não confirmado.", estado: "aplicado" },
+    { ponto: "A nota é por fonte, mas o modelo lê registros: um nome do crt.sh e um do VirusTotal chegam com o mesmo peso.", resposta: "Etiquetar cada registro do contexto com a fonte primária e a data, e rodar o M3 com e sem as etiquetas para ver se as hipóteses mudam.", estado: "proposto" },
+    { ponto: "O frescor está vazio justamente nas fontes herdadas.", resposta: "Usar a data de emissão do certificado no crt.sh e a data de observação da Censys numa coleta com crédito.", estado: "proposto" },
+    { ponto: "Origem mistura o contato com o alvo e o tipo de dado.", resposta: "Separados em duas colunas: contato e natureza.", estado: "aplicado" },
+    { ponto: "No shopify, o httpx observa a borda da CDN, não a aplicação.", resposta: "Medido pelo dono de cada IP: os 78 são de Cloudflare, Google Cloud, Amazon CloudFront e SendGrid, e nenhum está numa rede do próprio Shopify (mapa dos hosts, na Coleta). A versão vista é a da borda, e o CVE que sair dela também.", estado: "medido" },
+    { ponto: "Os números não sustentam as faixas: sem intervalo, denominadores diferentes, a Censys é só limite inferior.", resposta: "Numerador, denominador e intervalo de 95% em cada rendimento; Censys e NVD passaram a indeterminado.", estado: "aplicado" },
+  ],
+  criticaDiscordo:
+    "Um ponto ficou registrado sem mudança: a crítica diz que o critério de autenticidade foi desenhado a partir do CT. Foi de propósito: o CT é a referência de dado assinado e só de acréscimo, e as outras fontes são medidas contra ele.",
+  criticaSempre: "Vira passo fixo do método: toda tabela de avaliação passa por uma crítica assim antes de ir ao site.",
   medirTitulo: "Medir em vez de declarar",
   medir: [
     { texto: "Só 4,2% dos nomes do subfinder aparecem em duas fontes ou mais.", estado: "medido" },
@@ -248,6 +360,20 @@ export const experimento = {
   limitesTitulo: "Os limites e por que existem",
   limitesIntro:
     "A janela de 8.192 tokens não é limite dos modelos: o Llama aceita 128 mil e o Qwen 32 mil. É uma escolha, e o orçamento de 3.500 tokens do contexto sai dela.",
+  tokensTitulo: "Token é custo e janela, não limite do modelo",
+  tokens: [
+    { nome: "Custo", texto: "Num modelo hospedado, cada token de entrada e de saída é cobrado. Na máquina local, mais tokens viram mais tempo de CPU e mais energia." },
+    { nome: "Janela", texto: "A janela limita uma chamada, não a análise. Nada obriga a mandar tudo de uma vez, numa sessão só." },
+    { nome: "O modelo", texto: "Não é o limite: a mesma tarefa cabe em várias chamadas, desde que cada uma leve só o que precisa." },
+  ],
+  partesTitulo: "Se o contexto não coubesse, a análise iria em partes",
+  partes: [
+    { n: "1", titulo: "Em partes", texto: "Cada lote de grupos de hosts vai numa chamada própria." },
+    { n: "2", titulo: "Síntese estatística", texto: "Cada lote vira contagens: tecnologias, versões, status, CVEs." },
+    { n: "3", titulo: "Análise final", texto: "O modelo lê as sínteses e os grupos destacados e prioriza as hipóteses." },
+  ],
+  partesNota:
+    "O ReconAI reduziu antes de enviar: o filtro do M3 corta o shopify de 11,6 mil para 3,5 mil tokens. Reduzir continua sendo bom (custa menos e o modelo se perde menos), mas é uma escolha de projeto. A análise em partes fica como alternativa para alvos maiores, ainda não testada.",
   limites: [
     { nome: "Janela do modelo local", valor: "8.192 tokens", porque: "O padrão do Ollama é menor e cortaria o shopify sem avisar. Uma janela maior ocupa mais memória e fica mais lenta em CPU. 8.192 cobre o pior caso medido, 6.840 tokens de entrada mais saída." },
     { nome: "Contexto enviado ao modelo", valor: "3.500 tokens", porque: "Precisa caber com as instruções, os dois exemplos e a resposta. Sem o filtro, só o JSON do shopify tem 11,6 mil tokens. Modelos pequenos também usam pior entradas longas e tendem a ignorar o meio (Liu et al., 2023, “Lost in the Middle”)." },
@@ -257,6 +383,11 @@ export const experimento = {
     { nome: "Consultas à Censys", valor: "1 crédito por IP", porque: "Os créditos gratuitos acabaram em 12/10, por isso o experimento usa essa coleta." },
   ],
   gradeTitulo: "320 execuções, uma por ponto",
+  comparaTitulo: "Few-shot contra chain-of-thought, em números",
+  comparaIntro:
+    "Os dois modelos juntos, 160 execuções por técnica. A técnica mais cara entrega mais hipóteses e erra menos a faixa pedida, mas leva o dobro do tempo e varia três vezes mais. Por hipótese, sai mais cara na máquina local e mais barata se fosse hospedada, porque o chain-of-thought não leva os exemplos no prompt. Se as hipóteses a mais prestam, só a avaliação cega vai dizer.",
+  comparaNota:
+    "Energia: tempo de CPU × 80 W a R$ 0,90/kWh, a mesma estimativa do custo total. Hospedado: tokens medidos ao preço mediano do OpenRouter. Claude Sonnet 5.5: o que custaria se não recusasse, com o fator de tokens do teste de fumaça. Qualidade ainda não entra: nenhuma hipótese foi julgada.",
   resultadosTitulo: "As quatro combinações lado a lado",
   resultadosIntro:
     "Cada painel é uma métrica, com uma barra por combinação. A cor é o modelo e a barra listrada é o chain-of-thought; cada painel tem a própria escala.",
@@ -282,19 +413,31 @@ export const rodadas = {
     { codigo: "R4", data: "27/10", pedido: "Relacionar as dependências das fontes, desenhar o fluxograma, medir a confiança e dizer qual fonte é a melhor.", feito: "Fluxograma com a natureza de cada fonte, scorecard de quatro eixos e corroboração cruzada. O pipeline deixou de ser chamado de 100% passivo." },
     { codigo: "R5", data: "03/11", pedido: "Transformar a confiança em número, enxugar o contexto, recoletar o alvo que caiu e rodar o M3.", feito: "Scorecard medido, com oito notas revistas, e filtro de contexto de 11,6 mil para 3,5 mil tokens. No teste de fumaça o Sonnet recusou e a Groq deixou de servir o Llama, que passou a rodar local." },
     { codigo: "R6", data: "10/11", pedido: "Decidir o braço Claude, escolher um segundo modelo aberto, rodar o experimento e montar o baseline humano.", feito: "Recusa mantida como resultado e Qwen 2.5 7B como segundo modelo. As 320 execuções rodaram em cerca de 3,8 h de CPU, sem erro de formato, e o M4 ficou pronto." },
-    { codigo: "R7", data: "12/11", pedido: "Desenhar as fases do pentest, as fontes do subfinder e o mapa dos hosts; declarar modelos e limites; julgar a verificabilidade com mais precisão; comparar as técnicas e estimar o custo.", feito: "Organograma pelo PTES, recoleta do subfinder com a fonte de cada nome, mapa dos 2.491 hosts, tabelas de modelos e limites, régua de 0 a 8 e custo das 320 execuções." },
+    { codigo: "R7", data: "12/11", pedido: "Desenhar o pentest, as fontes do subfinder e os domínios num mapa; separar tokens de limite do modelo; questionar a tabela de confiança com uma IA; critérios objetivos de verificabilidade; custo nunca é zero; comparar as técnicas em números; baseline humano.", feito: "Respondido item por item na lista abaixo." },
+  ],
+  r7Titulo: "O que a Rodada 7 pediu e onde está",
+  r7: [
+    { pedido: "Desenho do pentest, com ferramentas, alvo e varredura", onde: "#contexto", rotulo: "Contexto", estado: "feito" },
+    { pedido: "Fontes do subfinder, com a origem num mapa", onde: "#coleta", rotulo: "Coleta", estado: "feito" },
+    { pedido: "Domínios num mapa, com outra cor para os que não responderam", onde: "#coleta", rotulo: "Coleta", estado: "feito" },
+    { pedido: "Tokens como limite de custo e de janela, não do modelo", onde: "#experimento", rotulo: "Experimento", estado: "feito" },
+    { pedido: "Tabela de confiança questionada por uma IA", onde: "#fontes", rotulo: "Fontes", estado: "feito" },
+    { pedido: "Critérios objetivos de verificabilidade por tipo de fonte", onde: "#fontes", rotulo: "Fontes", estado: "feito" },
+    { pedido: "Custo nunca é zero: estimar a energia", onde: "#experimento", rotulo: "Experimento", estado: "feito" },
+    { pedido: "Few-shot e chain-of-thought em números: hipóteses, latência e custo", onde: "#experimento", rotulo: "Experimento", estado: "feito" },
+    { pedido: "Baseline humano e avaliação cega", onde: "#obras", rotulo: "Em obras", estado: "em obras" },
   ],
 };
 
 export const video = {
   titulo: "O projeto em vídeo",
   texto:
-    "Uma retrospectiva animada do projeto, com narração gerada pela ElevenLabs e legendas. A identidade visual do vídeo é outra, porque ele foi feito como peça à parte.",
+    "Uma retrospectiva animada do projeto, do problema à Rodada 7, com legendas. A identidade visual do vídeo é outra, porque ele foi feito como peça à parte.",
   arquivo: "/video/reconai-resumo.mp4",
   legenda: "/video/reconai-resumo.vtt",
   poster: "/video/reconai-resumo.webp",
-  duracao: "1 min 27 s",
-  nota: "A versão atual tem 1 min 27 s. A versão de até 3 minutos, com as cenas da Rodada 7, entra aqui quando a narração nova estiver pronta.",
+  duracao: "2 min 48 s",
+  nota: "Versão de 2 min 48 s, ainda sem narração: a legenda segue o roteiro. A narração, com a voz do autor, entra na próxima versão.",
 };
 
 export const obras = {

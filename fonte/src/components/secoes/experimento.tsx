@@ -97,6 +97,36 @@ export function Experimento() {
         </table>
       </Rolavel>
 
+      {/* Token como custo e janela: três cartões curtos e o caminho em partes como uma linha de três estações. */}
+      <div className="mt-14 max-w-[64rem] border-t-[3px] border-tinta pt-6">
+        <h4 className="font-sinal text-xl font-black md:text-2xl">{E.tokensTitulo}</h4>
+        <dl className="mt-5 grid gap-x-10 gap-y-5 md:grid-cols-3">
+          {E.tokens.map((t) => (
+            <div key={t.nome}>
+              <dt className="font-sinal text-lg font-extrabold">{t.nome}</dt>
+              <dd className="mt-1 leading-relaxed text-tinta-2">{t.texto}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-8 font-sinal text-lg font-extrabold">{E.partesTitulo}</p>
+        <ol className="relative mt-5 grid gap-6 md:grid-cols-3 md:gap-0">
+          <span aria-hidden className="absolute left-[11px] top-2 h-[calc(100%-1rem)] w-[6px] md:left-2 md:right-8 md:top-[11px] md:h-[6px] md:w-auto" style={{ backgroundImage: "repeating-linear-gradient(90deg, var(--obra) 0 12px, transparent 12px 20px)" }} />
+          {E.partes.map((p) => (
+            <li key={p.n} className="relative grid grid-cols-[1.75rem_minmax(0,1fr)] gap-3 md:block md:pr-6">
+              <span aria-hidden className="relative z-10 block size-7 rounded-full border-[5px] border-dashed border-obra bg-papel" />
+              <div className="md:mt-3">
+                <p className="font-sinal font-extrabold">
+                  <span className="mr-2 font-mono text-sm text-suave">{p.n}</span>
+                  {p.titulo}
+                </p>
+                <p className="mt-1 leading-relaxed text-tinta-2">{p.texto}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="medida mt-6 leading-relaxed text-tinta-2">{E.partesNota}</p>
+      </div>
+
       {/* O seletor de linha: a mesma combinação acende na grade, nos painéis e no custo. */}
       <div className="sticky top-[6.25rem] z-20 -mx-2 mt-16 bg-papel/95 px-2 py-3 backdrop-blur-[2px] md:top-[7rem]">
         <p id="seletor-rotulo" className="font-sinal text-sm font-extrabold">{E.seletorRotulo}</p>
@@ -170,6 +200,11 @@ export function Experimento() {
         <span><b className="text-tinta">Claude Sonnet 5.5</b>: estação fechada. Recusou a tarefa no teste de fumaça de 03/11 e ficou fora da matriz.</span>
       </div>
 
+      <Sub>{E.comparaTitulo}</Sub>
+      <p className="medida mt-3 text-tinta-2">{E.comparaIntro}</p>
+      <ComparaTecnicas />
+      <p className="medida mt-4 text-sm leading-relaxed text-suave">{E.comparaNota}</p>
+
       <Sub>{E.resultadosTitulo}</Sub>
       <p className="medida mt-3 text-tinta-2">{E.resultadosIntro}</p>
       <div className="mt-8 grid max-w-[76rem] gap-x-12 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
@@ -217,7 +252,7 @@ export function Experimento() {
       <Sub>{E.custoTitulo}</Sub>
       <p className="medida mt-3 text-tinta-2">
         As {dados.feitas} execuções usaram {fmt(dados.tokens_tot.entrada)} tokens de entrada e {fmt(dados.tokens_tot.saida)} de saída, contados pelo Ollama.
-        Rodando na máquina, o custo de API foi zero.
+        Rodando na máquina, não houve conta de API, mas o custo não foi zero: foi a energia, na primeira linha.
       </p>
       <Rolavel rotulo="Custo das execuções">
         <table className="w-full min-w-[36rem] max-w-[56rem] border-collapse text-[0.95rem]">
@@ -264,5 +299,60 @@ function EstacaoFechada() {
       <circle cx="11" cy="11" r="8" fill="var(--papel)" stroke="var(--linha-pipeline)" strokeWidth="3.5" />
       <path d="M4 18 L18 4" stroke="var(--linha-pipeline)" strokeWidth="3.5" strokeLinecap="round" />
     </svg>
+  );
+}
+
+/** Few-shot contra CoT, com os dois modelos juntos (80 + 80 execuções por técnica). Tudo calculado dos dados. */
+function ComparaTecnicas() {
+  const precos = dados.precos as Record<string, { entrada: number; saida: number }>;
+  const { watts, rs_kwh } = dados.energia;
+  const fator = dados.fator_claude as Record<string, number>;
+  const media = (p: string, f: (t: (typeof dados.tecnicas)[number]) => number) => {
+    const ts = dados.tecnicas.filter((t) => t.prompt === p);
+    return ts.reduce((a, t) => a + f(t) * t.n, 0) / ts.reduce((a, t) => a + t.n, 0);
+  };
+  const energiaExec = (t: (typeof dados.tecnicas)[number]) => ((t.lat_med * watts) / 3.6e6) * rs_kwh; // R$ por execução
+  const linhas: { rot: string; nota: string; f: (p: string) => number; fmt: (v: number) => string}[] = [
+    { rot: "Hipóteses por execução", nota: "média", f: (p) => media(p, (t) => t.hip_med), fmt: (v) => fmt(v, 2) },
+    { rot: "Variação no mesmo alvo", nota: "desvio entre as 20 execuções", f: (p) => media(p, (t) => t.dp_dentro_alvo), fmt: (v) => fmt(v, 2) },
+    { rot: "Fora da faixa de 3 a 10", nota: "% das execuções", f: (p) => media(p, (t) => t.fora_faixa_pct), fmt: (v) => `${fmt(v, 1)}%` },
+    { rot: "Tempo por execução", nota: "CPU, sem GPU", f: (p) => media(p, (t) => t.lat_med), fmt: (v) => `${fmt(v, 1)} s` },
+    { rot: "Tempo por hipótese", nota: "tempo ÷ hipóteses", f: (p) => media(p, (t) => t.lat_med) / media(p, (t) => t.hip_med), fmt: (v) => `${fmt(v, 1)} s` },
+    { rot: "Tokens de saída", nota: "por execução", f: (p) => media(p, (t) => t.tout_med), fmt: (v) => fmt(v) },
+    { rot: "Energia, por mil execuções", nota: "local, como foi feito", f: (p) => 1000 * media(p, energiaExec), fmt: (v) => `R$ ${fmt(v, 2)}` },
+    { rot: "Energia, por mil hipóteses", nota: "local, como foi feito", f: (p) => (1000 * media(p, energiaExec)) / media(p, (t) => t.hip_med), fmt: (v) => `R$ ${fmt(v, 2)}` },
+    { rot: "Hospedado, por mil execuções", nota: "Llama e Qwen no OpenRouter", f: (p) => 1000 * media(p, (t) => (t.tin_med * precos[`${t.modelo}_hosp`].entrada + t.tout_med * precos[`${t.modelo}_hosp`].saida) / 1e6), fmt: (v) => `US$ ${fmt(v, 3)}` },
+    { rot: "Sonnet 5.5, por mil execuções", nota: "se não recusasse", f: (p) => 1000 * media(p, (t) => (t.tin_med * fator[p] * precos.sonnet55.entrada + t.tout_med * precos.sonnet55.saida) / 1e6), fmt: (v) => `US$ ${fmt(v, 2)}` },
+  ];
+  return (
+    <Rolavel rotulo="Comparação entre few-shot e chain-of-thought">
+      <table className="w-full min-w-[40rem] max-w-[56rem] border-collapse text-[0.95rem]">
+        <thead>
+          <tr className="border-b-2 border-tinta text-left font-sinal text-sm text-tinta-2">
+            <th scope="col" className="px-3 py-2">Métrica</th>
+            <th scope="col" className="px-3 py-2 text-right">Few-shot</th>
+            <th scope="col" className="px-3 py-2 text-right">Chain-of-thought</th>
+            <th scope="col" className="px-3 py-2 text-right">CoT ÷ few-shot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {linhas.map((l) => {
+            const fs = l.f("fewshot");
+            const cot = l.f("cot");
+            return (
+              <tr key={l.rot} className="border-b border-fio">
+                <th scope="row" className="px-3 py-2.5 text-left">
+                  <span className="font-sinal font-extrabold">{l.rot}</span>
+                  <span className="block text-sm font-normal text-suave">{l.nota}</span>
+                </th>
+                <td className="num px-3 py-2.5 text-right">{l.fmt(fs)}</td>
+                <td className="num px-3 py-2.5 text-right">{l.fmt(cot)}</td>
+                <td className="num px-3 py-2.5 text-right font-sinal font-black">× {fmt(cot / fs, 1)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </Rolavel>
   );
 }

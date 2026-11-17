@@ -30,6 +30,23 @@ export function Rodadas() {
           );
         })}
       </ol>
+
+      {/* O pedido da última rodada, item por item, com o lugar onde cada resposta está. */}
+      <h3 className="mt-6 font-sinal text-xl font-extrabold md:text-2xl">{rodadas.r7Titulo}</h3>
+      <ol className="mt-5 max-w-[60rem]">
+        {rodadas.r7.map((r, i) => (
+          <li key={r.pedido} className="grid grid-cols-[1.75rem_minmax(0,1fr)_auto] items-baseline gap-x-3 border-b border-fio py-3">
+            <span className="font-mono text-sm text-suave">{i + 1}</span>
+            <span className="leading-snug text-tinta-2">{r.pedido}</span>
+            <a
+              href={r.onde}
+              className={`whitespace-nowrap font-sinal text-sm font-bold underline-offset-4 hover:underline ${r.estado === "feito" ? "text-tinta" : "text-obra-texto"}`}
+            >
+              {r.rotulo} →
+            </a>
+          </li>
+        ))}
+      </ol>
     </Secao>
   );
 }

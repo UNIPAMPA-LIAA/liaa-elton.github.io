@@ -1,0 +1,215 @@
+{
+ "coleta_ips": "2026-10-12",
+ "base_geo": "DB-IP lite 2026-11 (CC BY 4.0)",
+ "total_ips": 78,
+ "total_hosts": 2491,
+ "sem_resposta": 43,
+ "pontos": [
+  {
+   "lat": 39.1,
+   "lon": -94.58,
+   "cidade": "Kansas City",
+   "pais": "US",
+   "ips": 9,
+   "hosts": 2290,
+   "sem_resposta": 0,
+   "operadores": [
+    "Google Cloud"
+   ],
+   "respondeu": true
+  },
+  {
+   "lat": 43.65,
+   "lon": -79.38,
+   "cidade": "Toronto",
+   "pais": "CA",
+   "ips": 15,
+   "hosts": 2284,
+   "sem_resposta": 0,
+   "operadores": [
+    "Cloudflare"
+   ],
+   "respondeu": true
+  },
+  {
+   "lat": 39.75,
+   "lon": -104.99,
+   "cidade": "Denver (Ballpark District)",
+   "pais": "US",
+   "ips": 39,
+   "hosts": 43,
+   "sem_resposta": 43,
+   "operadores": [
+    "Twilio SendGrid"
+   ],
+   "respondeu": false
+  },
+  {
+   "lat": 33.74,
+   "lon": -117.82,
+   "cidade": "Tustin",
+   "pais": "US",
+   "ips": 1,
+   "hosts": 43,
+   "sem_resposta": 43,
+   "operadores": [
+    "Twilio SendGrid"
+   ],
+   "respondeu": false
+  },
+  {
+   "lat": 37.79,
+   "lon": -122.39,
+   "cidade": "San Francisco (South Beach)",
+   "pais": "US",
+   "ips": 3,
+   "hosts": 43,
+   "sem_resposta": 43,
+   "operadores": [
+    "Twilio SendGrid"
+   ],
+   "respondeu": false
+  },
+  {
+   "lat": 32.88,
+   "lon": -80.01,
+   "cidade": "North Charleston",
+   "pais": "US",
+   "ips": 4,
+   "hosts": 3,
+   "sem_resposta": 0,
+   "operadores": [
+    "Google Cloud"
+   ],
+   "respondeu": true
+  },
+  {
+   "lat": 34.05,
+   "lon": -118.24,
+   "cidade": "Los Angeles",
+   "pais": "US",
+   "ips": 1,
+   "hosts": 3,
+   "sem_resposta": 0,
+   "operadores": [
+    "Google Cloud"
+   ],
+   "respondeu": true
+  },
+  {
+   "lat": 38.91,
+   "lon": -77.04,
+   "cidade": "Washington D.C.",
+   "pais": "US",
+   "ips": 1,
+   "hosts": 3,
+   "sem_resposta": 0,
+   "operadores": [
+    "Google Cloud"
+   ],
+   "respondeu": true
+  },
+  {
+   "lat": 41.26,
+   "lon": -95.86,
+   "cidade": "Council Bluffs",
+   "pais": "US",
+   "ips": 1,
+   "hosts": 1,
+   "sem_resposta": 0,
+   "operadores": [
+    "Google Cloud"
+   ],
+   "respondeu": true
+  },
+  {
+   "lat": -23.56,
+   "lon": -46.64,
+   "cidade": "São Paulo",
+   "pais": "BR",
+   "ips": 4,
+   "hosts": 1,
+   "sem_resposta": 0,
+   "operadores": [
+    "Amazon (CloudFront)"
+   ],
+   "respondeu": true
+  }
+ ],
+ "operadores": [
+  {
+   "operador": "Twilio SendGrid",
+   "ips": 43,
+   "paises": [
+    "US"
+   ]
+  },
+  {
+   "operador": "Google Cloud",
+   "ips": 16,
+   "paises": [
+    "US"
+   ]
+  },
+  {
+   "operador": "Cloudflare",
+   "ips": 15,
+   "paises": [
+    "CA"
+   ]
+  },
+  {
+   "operador": "Amazon (CloudFront)",
+   "ips": 4,
+   "paises": [
+    "BR"
+   ]
+  }
+ ],
+ "acuracia": {
+  "resolucao": "2026-11-17",
+  "nomes": 10779,
+  "resolvem": 10144,
+  "por_fonte": [
+   {
+    "fonte": "virustotal",
+    "nomes": 9600,
+    "resolvem": 9090,
+    "so_esta": 9364,
+    "so_esta_resolvem": 8865
+   },
+   {
+    "fonte": "thc",
+    "nomes": 1247,
+    "resolvem": 1133,
+    "so_esta": 845,
+    "so_esta_resolvem": 758
+   },
+   {
+    "fonte": "crtsh",
+    "nomes": 304,
+    "resolvem": 269,
+    "so_esta": 112,
+    "so_esta_resolvem": 93
+   },
+   {
+    "fonte": "hackertarget",
+    "nomes": 50,
+    "resolvem": 47,
+    "so_esta": 0,
+    "so_esta_resolvem": 0
+   },
+   {
+    "fonte": "dnsdumpster",
+    "nomes": 50,
+    "resolvem": 47,
+    "so_esta": 0,
+    "so_esta_resolvem": 0
+   }
+  ],
+  "em_2_ou_mais": {
+   "nomes": 458,
+   "resolvem": 428
+  }
+ }
+}

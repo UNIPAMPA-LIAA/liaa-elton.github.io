@@ -187,6 +187,7 @@ def main():
         "tokens_tot": {"entrada": sum(t["tin_tot"] for t in tecnicas), "saida": sum(t["tout_tot"] for t in tecnicas)},
         "precos": {k: {"nome": v[0], "entrada": v[1], "saida": v[2]} for k, v in PRECOS.items()},
         "fator_claude": FATOR_CLAUDE,
+        "energia": {"watts": WATTS, "rs_kwh": RS_KWH},
         "humano": humano,
         "avaliacao_cega": avaliacao,
     }
